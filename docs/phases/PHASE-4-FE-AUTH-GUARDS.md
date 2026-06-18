@@ -1,9 +1,9 @@
-# Phase 7 — Frontend: Auth & Guards
+# Phase 4 — Frontend: Auth & Guards
 
 **Goal:** Deliver the login experience and client-side access control — an auth slice,
 login page, route/role guards, a user menu with logout, and the Admin users screen.
 
-**Depends on:** [Phase 6 — Frontend: Shell](./PHASE-6-FE-SHELL.md),
+**Depends on:** [Phase 3 — Frontend: Shell](./PHASE-3-FE-SHELL.md),
 [Phase 2 — Backend: Auth & RBAC](./PHASE-2-BE-AUTH-RBAC.md).
 
 > Client guards are **UX only** — the backend is the real enforcement point. Guards
@@ -53,7 +53,7 @@ login page, route/role guards, a user menu with logout, and the Admin users scre
 ## Definition of Done
 
 - [ ] Unauthenticated users are redirected to login; valid login lands in the app.
-- [ ] Expired access token is transparently refreshed (via Phase 6 baseQuery).
+- [ ] Expired access token is transparently refreshed (via Phase 3 baseQuery).
 - [ ] Role-restricted screens/actions are hidden/blocked for the wrong role.
 - [ ] Admin can manage users; auth flow + guard tests pass.
 

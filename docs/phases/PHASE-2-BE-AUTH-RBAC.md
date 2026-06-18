@@ -11,7 +11,7 @@ rotation with reuse detection; RBAC middleware enforced; 9 auth/RBAC tests pass;
 `typecheck` and `lint` pass.
 
 > This phase also brings up the cross-cutting infrastructure (envelope, error
-> hierarchy, validate middleware) that the domain modules in Phases 3–5 reuse.
+> hierarchy, validate middleware) that the domain modules in Phases 5–7 reuse.
 
 ---
 

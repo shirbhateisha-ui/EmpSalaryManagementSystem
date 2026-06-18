@@ -1,10 +1,10 @@
-# Phase 5 — Backend: Analytics
+# Phase 7 — Backend: Analytics
 
 **Goal:** Deliver the reporting endpoints that answer the HR Manager's payroll
 questions via deterministic SQL aggregations, with all amounts normalized to USD.
 
-**Depends on:** [Phase 3 — Backend: Employees](./PHASE-3-BE-EMPLOYEES.md),
-[Phase 4 — Backend: Salaries](./PHASE-4-BE-SALARIES.md).
+**Depends on:** [Phase 5 — Backend: Employees](./PHASE-5-BE-EMPLOYEES.md),
+[Phase 6 — Backend: Salaries](./PHASE-6-BE-SALARIES.md).
 
 ---
 

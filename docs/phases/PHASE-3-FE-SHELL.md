@@ -1,8 +1,8 @@
-# Phase 6 — Frontend: Shell
+# Phase 3 — Frontend: Shell
 
 **Goal:** Build the application shell — layout, navigation, Redux store, RTK Query base,
 and routing — on top of the Phase 0 Vite/Tailwind/Shadcn scaffold, ready to consume the
-live backend API. The base query is **auth-aware** so it can carry tokens once Phase 7
+live backend API. The base query is **auth-aware** so it can carry tokens once Phase 4
 lands the login flow.
 
 **Depends on:** [Phase 0 — Foundation](./PHASE-0-FOUNDATION.md),

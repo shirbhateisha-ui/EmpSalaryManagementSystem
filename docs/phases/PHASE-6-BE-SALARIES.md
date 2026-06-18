@@ -1,9 +1,9 @@
-# Phase 4 — Backend: Salaries
+# Phase 6 — Backend: Salaries
 
 **Goal:** Deliver salary history and raises. Adding a salary creates a new record
 (additive history); "current salary" is always the latest effective record.
 
-**Depends on:** [Phase 3 — Backend: Employees](./PHASE-3-BE-EMPLOYEES.md).
+**Depends on:** [Phase 5 — Backend: Employees](./PHASE-5-BE-EMPLOYEES.md).
 
 ---
 

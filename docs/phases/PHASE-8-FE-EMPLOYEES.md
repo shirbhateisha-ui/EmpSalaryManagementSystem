@@ -4,8 +4,8 @@
 sorting, pagination), detail view with salary history, and create/edit forms — with
 all four UI states handled.
 
-**Depends on:** [Phase 7 — Frontend: Auth & Guards](./PHASE-7-FE-AUTH-GUARDS.md),
-[Phase 4 — Backend: Salaries](./PHASE-4-BE-SALARIES.md).
+**Depends on:** [Phase 4 — Frontend: Auth & Guards](./PHASE-4-FE-AUTH-GUARDS.md),
+[Phase 6 — Backend: Salaries](./PHASE-6-BE-SALARIES.md).
 
 ---
 

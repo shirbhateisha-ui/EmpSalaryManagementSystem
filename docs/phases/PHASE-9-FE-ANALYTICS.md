@@ -4,8 +4,8 @@
 insights/reporting panel that answers the HR Manager's common payroll questions
 (deterministic SQL, no AI in the app).
 
-**Depends on:** [Phase 6 — Frontend: Shell](./PHASE-6-FE-SHELL.md),
-[Phase 5 — Backend: Analytics](./PHASE-5-BE-ANALYTICS.md).
+**Depends on:** [Phase 3 — Frontend: Shell](./PHASE-3-FE-SHELL.md),
+[Phase 7 — Backend: Analytics](./PHASE-7-BE-ANALYTICS.md).
 
 ---
 

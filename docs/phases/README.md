@@ -15,11 +15,11 @@ See also: [REQUIREMENTS.md](../REQUIREMENTS.md) · [ARCHITECTURE.md](../ARCHITEC
 | 0   | Foundation       | [PHASE-0-FOUNDATION.md](./PHASE-0-FOUNDATION.md)                 | Monorepo, TS, lint, env, scaffolding                                      |
 | 1   | DB & Seed        | [PHASE-1-DB-AND-SEED.md](./PHASE-1-DB-AND-SEED.md)               | Schema (incl. users + refresh_tokens), migrations, view, 10k seed + admin |
 | 2   | BE Auth & RBAC   | [PHASE-2-BE-AUTH-RBAC.md](./PHASE-2-BE-AUTH-RBAC.md)             | Login, refresh rotation, RBAC middleware, user management                 |
-| 3   | BE Employees     | [PHASE-3-BE-EMPLOYEES.md](./PHASE-3-BE-EMPLOYEES.md)             | CRUD + search/filter/sort/paginate, clean layers                          |
-| 4   | BE Salaries      | [PHASE-4-BE-SALARIES.md](./PHASE-4-BE-SALARIES.md)               | Salary history + raises                                                   |
-| 5   | BE Analytics     | [PHASE-5-BE-ANALYTICS.md](./PHASE-5-BE-ANALYTICS.md)             | Aggregation endpoints + currency normalization                            |
-| 6   | FE Shell         | [PHASE-6-FE-SHELL.md](./PHASE-6-FE-SHELL.md)                     | Layout, store, RTK Query base (token + refresh), routing                  |
-| 7   | FE Auth & Guards | [PHASE-7-FE-AUTH-GUARDS.md](./PHASE-7-FE-AUTH-GUARDS.md)         | Login page, auth slice, route/role guards, users admin                    |
+| 3   | FE Shell         | [PHASE-3-FE-SHELL.md](./PHASE-3-FE-SHELL.md)                     | Layout, store, RTK Query base (token + refresh), routing                  |
+| 4   | FE Auth & Guards | [PHASE-4-FE-AUTH-GUARDS.md](./PHASE-4-FE-AUTH-GUARDS.md)         | Login page, auth slice, route/role guards, users admin                    |
+| 5   | BE Employees     | [PHASE-5-BE-EMPLOYEES.md](./PHASE-5-BE-EMPLOYEES.md)             | CRUD + search/filter/sort/paginate, clean layers                          |
+| 6   | BE Salaries      | [PHASE-6-BE-SALARIES.md](./PHASE-6-BE-SALARIES.md)               | Salary history + raises                                                   |
+| 7   | BE Analytics     | [PHASE-7-BE-ANALYTICS.md](./PHASE-7-BE-ANALYTICS.md)             | Aggregation endpoints + currency normalization                            |
 | 8   | FE Employees     | [PHASE-8-FE-EMPLOYEES.md](./PHASE-8-FE-EMPLOYEES.md)             | List, detail, create/edit, all 4 states                                   |
 | 9   | FE Analytics     | [PHASE-9-FE-ANALYTICS.md](./PHASE-9-FE-ANALYTICS.md)             | Dashboard cards + charts + insights/reporting panel                       |
 | 10  | Harden & Deploy  | [PHASE-10-HARDEN-AND-DEPLOY.md](./PHASE-10-HARDEN-AND-DEPLOY.md) | Docs, deploy, persistent SQLite                                           |
