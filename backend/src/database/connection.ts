@@ -6,6 +6,9 @@ import { env } from '../config/env.js';
 let dbInstance: Database.Database | null = null;
 
 function ensureDbDirectory(dbPath: string): void {
+  if (dbPath === ':memory:' || dbPath.startsWith('file:')) {
+    return;
+  }
   const dir = path.dirname(dbPath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
