@@ -11,11 +11,13 @@ backend modules so they can be built against a real database.
 ## Tasks
 
 ### Connection
+
 - [ ] `database/connection.ts` using **better-sqlite3**, reading `DB_PATH`.
 - [ ] Enable PRAGMAs: `journal_mode=WAL`, `foreign_keys=ON`.
 - [ ] Export a single shared DB instance.
 
 ### Migrations
+
 - [ ] Small **ordered, idempotent migration runner** (tracks applied migrations).
 - [ ] `currencies` table (`code` PK, `name`, `symbol`, `rate_to_usd`).
 - [ ] `employees` table (id, name, email UNIQUE, country, department, currency_code FK,
@@ -28,6 +30,7 @@ backend modules so they can be built against a real database.
       created_at).
 
 ### Indexes & view
+
 - [ ] Indexes: `employees(email)` UNIQUE, `employees(country)`,
       `employees(department)`, `employees(status)`, `employees(name)`.
 - [ ] Index: `salaries(employee_id, effective_date DESC)`.
@@ -37,6 +40,7 @@ backend modules so they can be built against a real database.
       `base_salary_usd = base_salary * rate_to_usd`.
 
 ### Seed
+
 - [ ] Seed `currencies` with a fixed set + `rate_to_usd`.
 - [ ] Seed **10,000 employees** with realistic name, unique email, country,
       department, currency, joining date (faker).
@@ -47,15 +51,18 @@ backend modules so they can be built against a real database.
 ---
 
 ## Deliverables
+
 - Migrated SQLite database with indexes and the current-salary view.
 - Reproducible 10k-employee seed.
 
 ## Definition of Done
+
 - [ ] Fresh migrate → seed produces exactly 10,000 employees.
 - [ ] Re-running seed does not duplicate data.
 - [ ] `v_current_salary` returns one current row per employee with USD value.
 
 ## Suggested commits
+
 - `feat(db): employees/salaries/currencies schema + indexes`
 - `feat(db): users + refresh_tokens schema`
 - `feat(db): v_current_salary view`
