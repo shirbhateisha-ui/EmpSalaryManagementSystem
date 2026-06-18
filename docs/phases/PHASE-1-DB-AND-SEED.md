@@ -6,47 +6,51 @@ backend modules so they can be built against a real database.
 
 **Depends on:** [Phase 0 — Foundation](./PHASE-0-FOUNDATION.md).
 
+**Status:** ✅ Complete — `db:migrate` applies all migrations; `db:seed` produces 10,000
+employees; re-run is idempotent; `v_current_salary` returns one row per employee with USD
+values; `typecheck` and `lint` pass.
+
 ---
 
 ## Tasks
 
 ### Connection
 
-- [ ] `database/connection.ts` using **better-sqlite3**, reading `DB_PATH`.
-- [ ] Enable PRAGMAs: `journal_mode=WAL`, `foreign_keys=ON`.
-- [ ] Export a single shared DB instance.
+- [x] `database/connection.ts` using **better-sqlite3**, reading `DB_PATH`.
+- [x] Enable PRAGMAs: `journal_mode=WAL`, `foreign_keys=ON`.
+- [x] Export a single shared DB instance.
 
 ### Migrations
 
-- [ ] Small **ordered, idempotent migration runner** (tracks applied migrations).
-- [ ] `currencies` table (`code` PK, `name`, `symbol`, `rate_to_usd`).
-- [ ] `employees` table (id, name, email UNIQUE, country, department, currency_code FK,
+- [x] Small **ordered, idempotent migration runner** (tracks applied migrations).
+- [x] `currencies` table (`code` PK, `name`, `symbol`, `rate_to_usd`).
+- [x] `employees` table (id, name, email UNIQUE, country, department, currency_code FK,
       status, joining_date, created_at, updated_at).
-- [ ] `salaries` table (id, employee_id FK, base_salary, currency_code FK, country,
+- [x] `salaries` table (id, employee_id FK, base_salary, currency_code FK, country,
       effective_date, created_at).
-- [ ] `users` table (id, name, email UNIQUE, password_hash, role
+- [x] `users` table (id, name, email UNIQUE, password_hash, role
       `ADMIN|HR_MANAGER|VIEWER`, status, created_at, updated_at).
-- [ ] `refresh_tokens` table (id, user_id FK, token_hash, expires_at, revoked_at,
+- [x] `refresh_tokens` table (id, user_id FK, token_hash, expires_at, revoked_at,
       created_at).
 
 ### Indexes & view
 
-- [ ] Indexes: `employees(email)` UNIQUE, `employees(country)`,
+- [x] Indexes: `employees(email)` UNIQUE, `employees(country)`,
       `employees(department)`, `employees(status)`, `employees(name)`.
-- [ ] Index: `salaries(employee_id, effective_date DESC)`.
-- [ ] Indexes: `users(email)` UNIQUE, `refresh_tokens(token_hash)`,
+- [x] Index: `salaries(employee_id, effective_date DESC)`.
+- [x] Indexes: `users(email)` UNIQUE, `refresh_tokens(token_hash)`,
       `refresh_tokens(user_id)`.
-- [ ] View `v_current_salary` — latest salary per employee, exposing
+- [x] View `v_current_salary` — latest salary per employee, exposing
       `base_salary_usd = base_salary * rate_to_usd`.
 
 ### Seed
 
-- [ ] Seed `currencies` with a fixed set + `rate_to_usd`.
-- [ ] Seed **10,000 employees** with realistic name, unique email, country,
+- [x] Seed `currencies` with a fixed set + `rate_to_usd`.
+- [x] Seed **10,000 employees** with realistic name, unique email, country,
       department, currency, joining date (faker).
-- [ ] Seed an initial salary per employee; give some multiple history records (raises).
-- [ ] Seed an initial **Admin user** (credentials from env; password hashed with bcrypt).
-- [ ] Make the seed **idempotent** (row-count guard or `--reset` flag).
+- [x] Seed an initial salary per employee; give some multiple history records (raises).
+- [x] Seed an initial **Admin user** (credentials from env; password hashed with bcrypt).
+- [x] Make the seed **idempotent** (row-count guard or `--reset` flag).
 
 ---
 
@@ -57,9 +61,9 @@ backend modules so they can be built against a real database.
 
 ## Definition of Done
 
-- [ ] Fresh migrate → seed produces exactly 10,000 employees.
-- [ ] Re-running seed does not duplicate data.
-- [ ] `v_current_salary` returns one current row per employee with USD value.
+- [x] Fresh migrate → seed produces exactly 10,000 employees.
+- [x] Re-running seed does not duplicate data.
+- [x] `v_current_salary` returns one current row per employee with USD value.
 
 ## Suggested commits
 
