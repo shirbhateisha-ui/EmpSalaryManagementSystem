@@ -25,15 +25,16 @@ SQL aggregations.
 **HR Manager** is the primary user. Access is governed by **role-based access control
 (RBAC)** with three roles:
 
-| Role | Capabilities |
-|---|---|
-| **Admin** | Everything, plus **user management** (create/deactivate users, assign roles). |
+| Role           | Capabilities                                                                     |
+| -------------- | -------------------------------------------------------------------------------- |
+| **Admin**      | Everything, plus **user management** (create/deactivate users, assign roles).    |
 | **HR Manager** | Manage employees & salaries (create/update), view analytics. No user management. |
-| **Viewer** | Read-only: view employees and analytics. No edits. |
+| **Viewer**     | Read-only: view employees and analytics. No edits.                               |
 
 ## 4. In Scope
 
 **Authentication & Access Control**
+
 - Email + password **login** with securely hashed passwords (bcrypt/argon2).
 - **JWT access tokens** (short-lived) for API authorization, sent per request.
 - **Refresh tokens** (long-lived, httpOnly secure cookie) with **rotation** and
@@ -43,24 +44,28 @@ SQL aggregations.
 - **User management** (Admin only): create users, assign roles, deactivate.
 
 **Employee Management**
+
 - Create, update, view employees.
 - Search (by name/email), filter (country, department, status), sort, paginate —
   performant over 10,000 rows.
 
 **Salary Management**
+
 - Base salary, currency, country, effective date.
-- **Full salary history** per employee. A raise creates a *new* salary record;
+- **Full salary history** per employee. A raise creates a _new_ salary record;
   nothing is overwritten. "Current salary" = latest effective record.
 - **Multi-currency normalization** to a base reporting currency (USD) so totals
   across countries are meaningful.
 
 **Analytics Dashboard**
+
 - Total payroll (annual + monthly), average / highest / lowest salary, headcount.
 - Payroll and average salary **by country** and **by department**.
 - **Salary distribution** (histogram bands).
 - **Top-N highest paid** employees.
 
 **Reporting / Insights (deterministic SQL, no LLM)**
+
 - The dashboard answers the HR Manager's common payroll questions directly through
   analytics endpoints — there is no AI/LLM inside the application. Examples:
   - "How much do we spend monthly?" → summary
@@ -70,19 +75,20 @@ SQL aggregations.
   - "Salary distribution breakdown?" → distribution
 
 **Seed Data**
+
 - Script generating 10,000 employees with realistic name, email, country,
   department, currency, salary, joining date.
 
 ## 5. Out of Scope (and why)
 
-| Excluded | Reasoning |
-|---|---|
-| **LLM-based Q&A** | Assessment requires SQL aggregations. Deterministic answers are auditable, free, correct, and testable. The API is designed so an LLM→SQL layer could slot in later behind the same endpoints. |
-| **Multi-tenant orgs, SSO, MFA, social login** | One organization with managed email/password sign-in. Enterprise SSO, multi-factor, and social providers add integration surface beyond this assessment; the RBAC model leaves room to add them later. |
-| **Payroll *execution*** (payslips, tax, deductions, net pay, disbursement) | This is a *management & reporting* tool, not a payroll engine. Net/tax requires per-country compliance — a multi-month effort. |
-| **Live FX rates** | Exchange rates are a seeded/config table, not a live integration. Keeps analytics deterministic and testable; pluggable later. |
-| **Bulk Excel import/export** | Seed replaces import. CSV export is a fast-follow, not core. |
-| **Real-time / websockets / notifications / approval workflows** | No collaborative or multi-user editing need for a single operator. |
+| Excluded                                                                   | Reasoning                                                                                                                                                                                              |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **LLM-based Q&A**                                                          | Assessment requires SQL aggregations. Deterministic answers are auditable, free, correct, and testable. The API is designed so an LLM→SQL layer could slot in later behind the same endpoints.         |
+| **Multi-tenant orgs, SSO, MFA, social login**                              | One organization with managed email/password sign-in. Enterprise SSO, multi-factor, and social providers add integration surface beyond this assessment; the RBAC model leaves room to add them later. |
+| **Payroll _execution_** (payslips, tax, deductions, net pay, disbursement) | This is a _management & reporting_ tool, not a payroll engine. Net/tax requires per-country compliance — a multi-month effort.                                                                         |
+| **Live FX rates**                                                          | Exchange rates are a seeded/config table, not a live integration. Keeps analytics deterministic and testable; pluggable later.                                                                         |
+| **Bulk Excel import/export**                                               | Seed replaces import. CSV export is a fast-follow, not core.                                                                                                                                           |
+| **Real-time / websockets / notifications / approval workflows**            | No collaborative or multi-user editing need for a single operator.                                                                                                                                     |
 
 ## 6. Non-Functional Requirements
 

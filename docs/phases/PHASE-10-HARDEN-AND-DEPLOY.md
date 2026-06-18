@@ -14,6 +14,7 @@ redeploys.
 ## Tasks
 
 ### Hardening
+
 - [ ] Final pass on error/empty/loading states across all screens.
 - [ ] Confirm `lint`, `typecheck`, and the full test suite pass.
 - [ ] Lock backend CORS to the exact Vercel origin **with credentials**; confirm
@@ -22,10 +23,12 @@ redeploys.
 - [ ] Ensure no secrets are committed; all config (incl. token secrets) via env.
 
 ### Documentation
+
 - [ ] Update root `README.md`: overview, local setup, scripts, env vars, live URLs.
 - [ ] Confirm `docs/REQUIREMENTS.md` and `docs/ARCHITECTURE.md` are current.
 
 ### Backend — Render
+
 - [ ] Create a Render **Web Service** for the backend.
 - [ ] Attach a **Persistent Disk**, mount the DB at `/data/app.db`, set `DB_PATH`.
 - [ ] Run **migrations** on boot; run **seed once** (idempotent guard) if empty,
@@ -39,11 +42,13 @@ redeploys.
 > volume**, or **LiteFS**. Decide before first deploy.
 
 ### Frontend — Vercel
+
 - [ ] Import the repo; set the frontend root and build command.
 - [ ] Set `VITE_API_URL` to the deployed backend URL.
 - [ ] Configure SPA rewrite (all routes → `index.html`).
 
 ### Verification
+
 - [ ] Production smoke test: **log in**, list/search/filter employees, view detail +
       history, create employee, view dashboard analytics, **log out**.
 - [ ] Verify RBAC in prod: a Viewer cannot perform writes; Admin can manage users.
@@ -52,15 +57,18 @@ redeploys.
 ---
 
 ## Deliverables
+
 - Publicly accessible, connected frontend + backend with persistent data and docs.
 
 ## Definition of Done
+
 - [ ] Frontend (Vercel) and backend (Render) are live and connected.
 - [ ] 10k seed data is present and **persists across redeploys**.
 - [ ] All core flows work end-to-end in production.
 - [ ] README documents URLs, environment variables, and deploy steps.
 
 ## Suggested commits
+
 - `docs: README + architecture + requirements`
 - `chore: deploy config (vercel+render+disk+auth secrets)`
 - `chore: idempotent seed guard`

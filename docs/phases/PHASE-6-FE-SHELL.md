@@ -13,6 +13,7 @@ lands the login flow.
 ## Tasks
 
 ### State & data layer
+
 - [ ] Configure **Redux Toolkit** store in `app/store.ts` with typed `hooks.ts`.
 - [ ] Add **RTK Query** base API (`services/baseQuery.ts`) reading `VITE_API_URL`,
       sending credentials, **attaching the access token** from state, and
@@ -20,29 +21,35 @@ lands the login flow.
 - [ ] Add `app/providers.tsx` wrapping Redux `<Provider>` and the router.
 
 ### Routing & layout
+
 - [ ] Configure **React Router** in `app/router.tsx` with route definitions.
 - [ ] Build `layouts/AppShell`, `Header`, `Sidebar` with a navigation config.
 - [ ] Make the layout responsive (sidebar collapses on small screens).
 
 ### Shared primitives
+
 - [ ] Add base Shadcn components used app-wide (button, card, input, table, skeleton, toast).
 - [ ] Add reusable **state components**: `LoadingState`, `EmptyState`, `ErrorState`.
 - [ ] Add shared hooks: `useDebounce`, `useToast`.
 
 ### Verification
+
 - [ ] App boots, navigation works, and a sample query hits the live API successfully.
 
 ---
 
 ## Deliverables
+
 - Running frontend shell with routing, layout, store, and RTK Query base wired to the API.
 
 ## Definition of Done
+
 - [ ] `npm run dev` serves the shell with working navigation.
 - [ ] Store + RTK Query base configured and typed.
 - [ ] A live API call (e.g. `/health` or employees list) succeeds from the UI.
 - [ ] `typecheck` and `lint` pass.
 
 ## Suggested commits
+
 - `feat(fe): app shell + sidebar + router`
 - `feat(fe): rtk query baseQuery with auth + store`
