@@ -4,8 +4,9 @@ import { AuthGuard } from '@/features/auth/components/AuthGuard';
 import { RoleGuard } from '@/features/auth/components/RoleGuard';
 import LoginPage from '@/features/auth/pages/LoginPage';
 import UsersPage from '@/features/users/pages/UsersPage';
+import EmployeesPage from '@/features/employees/pages/EmployeesPage';
+import EmployeeDetailPage from '@/features/employees/pages/EmployeeDetailPage';
 import DashboardPage from '@/pages/DashboardPage';
-import EmployeesPage from '@/pages/EmployeesPage';
 import AnalyticsPage from '@/pages/AnalyticsPage';
 
 export const router = createBrowserRouter([
@@ -21,8 +22,9 @@ export const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { index: true, element: <DashboardPage /> },
-          { path: 'employees', element: <EmployeesPage /> },
-          { path: 'analytics', element: <AnalyticsPage /> },
+          { path: 'employees',    element: <EmployeesPage /> },
+          { path: 'employees/:id', element: <EmployeeDetailPage /> },
+          { path: 'analytics',   element: <AnalyticsPage /> },
           {
             element: <RoleGuard allowedRoles={['ADMIN']} />,
             children: [{ path: 'users', element: <UsersPage /> }],
