@@ -25,15 +25,19 @@ export function seedTestUsers(): {
   const adminPassword = 'Admin1234';
   const viewerPassword = 'Viewer1234';
 
-  db.prepare(`
+  db.prepare(
+    `
     INSERT INTO users (name, email, password_hash, role, status, created_at, updated_at)
     VALUES (?, ?, ?, ?, 'active', ?, ?)
-  `).run('Admin User', 'admin@test.com', hashPasswordSync(adminPassword), 'ADMIN', now, now);
+  `,
+  ).run('Admin User', 'admin@test.com', hashPasswordSync(adminPassword), 'ADMIN', now, now);
 
-  db.prepare(`
+  db.prepare(
+    `
     INSERT INTO users (name, email, password_hash, role, status, created_at, updated_at)
     VALUES (?, ?, ?, ?, 'active', ?, ?)
-  `).run('Viewer User', 'viewer@test.com', hashPasswordSync(viewerPassword), 'VIEWER', now, now);
+  `,
+  ).run('Viewer User', 'viewer@test.com', hashPasswordSync(viewerPassword), 'VIEWER', now, now);
 
   return {
     admin: { email: 'admin@test.com', password: adminPassword },
@@ -42,7 +46,7 @@ export function seedTestUsers(): {
 }
 
 export function extractRefreshCookie(cookies: string | string[] | undefined): string {
-  const header = Array.isArray(cookies) ? cookies.join('; ') : cookies ?? '';
+  const header = Array.isArray(cookies) ? cookies.join('; ') : (cookies ?? '');
   const match = /refresh_token=([^;]+)/.exec(header);
   if (!match) {
     throw new Error('Refresh token cookie not found');
