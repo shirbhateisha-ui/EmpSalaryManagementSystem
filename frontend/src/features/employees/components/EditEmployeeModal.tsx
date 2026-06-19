@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
 import { COUNTRIES } from '@/lib/countries';
 import { CURRENCIES } from '@/lib/currencies';
+import { DEPARTMENTS } from '@/lib/departments';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useUpdateEmployeeMutation } from '../api/employees.api';
 import type { Employee, UpdateEmployeeRequest } from '../types/employee.types';
@@ -94,13 +95,18 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
 
             <div className="space-y-1.5">
               <label htmlFor="ee-department" className="text-sm font-medium">Department</label>
-              <Input
+              <select
                 id="ee-department"
-                type="text"
                 value={form.department ?? ''}
                 onChange={(e) => set('department', e.target.value)}
                 disabled={isLoading}
-              />
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                <option value="">-- Select Department --</option>
+                {DEPARTMENTS.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-1.5">
