@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DatePicker } from '@/components/ui/date-picker';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useCreateEmployeeMutation } from '../api/employees.api';
 import type { CreateEmployeeRequest } from '../types/employee.types';
@@ -69,12 +70,11 @@ export function CreateEmployeeModal({ onClose }: Props) {
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             {(
               [
-                { key: 'name',          label: 'Name',          placeholder: 'Jane Smith',   type: 'text' },
-                { key: 'email',         label: 'Email',         placeholder: 'jane@co.com',  type: 'email' },
-                { key: 'country',       label: 'Country',       placeholder: 'US',           type: 'text' },
-                { key: 'department',    label: 'Department',    placeholder: 'Engineering',  type: 'text' },
-                { key: 'currency_code', label: 'Currency Code', placeholder: 'USD',          type: 'text' },
-                { key: 'joining_date',  label: 'Joining Date',  placeholder: 'YYYY-MM-DD',   type: 'text' },
+                { key: 'name',          label: 'Name',          placeholder: 'Jane Smith',  type: 'text' },
+                { key: 'email',         label: 'Email',         placeholder: 'jane@co.com', type: 'email' },
+                { key: 'country',       label: 'Country',       placeholder: 'US',          type: 'text' },
+                { key: 'department',    label: 'Department',    placeholder: 'Engineering', type: 'text' },
+                { key: 'currency_code', label: 'Currency Code', placeholder: 'USD',         type: 'text' },
               ] as const
             ).map(({ key, label, placeholder, type }) => (
               <div key={key} className="space-y-1.5">
@@ -91,6 +91,18 @@ export function CreateEmployeeModal({ onClose }: Props) {
                 {fieldErrors[key] && <p className="text-xs text-destructive">{fieldErrors[key]}</p>}
               </div>
             ))}
+
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Joining Date</label>
+              <DatePicker
+                value={form.joining_date}
+                onChange={(v) => set('joining_date', v)}
+                disabled={isLoading}
+                placeholder="Pick a date"
+                aria-invalid={!!fieldErrors.joining_date}
+              />
+              {fieldErrors.joining_date && <p className="text-xs text-destructive">{fieldErrors.joining_date}</p>}
+            </div>
 
             <div className="space-y-1.5">
               <label htmlFor="ce-status" className="text-sm font-medium">Status</label>

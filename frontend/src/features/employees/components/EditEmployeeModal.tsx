@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DatePicker } from '@/components/ui/date-picker';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useUpdateEmployeeMutation } from '../api/employees.api';
 import type { Employee, UpdateEmployeeRequest } from '../types/employee.types';
@@ -62,7 +63,6 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 { key: 'country',       label: 'Country',       type: 'text' },
                 { key: 'department',    label: 'Department',    type: 'text' },
                 { key: 'currency_code', label: 'Currency Code', type: 'text' },
-                { key: 'joining_date',  label: 'Joining Date',  type: 'text' },
               ] as const
             ).map(({ key, label, type }) => (
               <div key={key} className="space-y-1.5">
@@ -76,6 +76,16 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 />
               </div>
             ))}
+
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Joining Date</label>
+              <DatePicker
+                value={form.joining_date ?? ''}
+                onChange={(v) => set('joining_date', v)}
+                disabled={isLoading}
+                placeholder="Pick a date"
+              />
+            </div>
 
             <div className="space-y-1.5">
               <label htmlFor="ee-status" className="text-sm font-medium">Status</label>
