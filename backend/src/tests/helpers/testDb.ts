@@ -47,11 +47,11 @@ export function seedTestUsers(): {
   };
 }
 
-export function seedTestCurrency(code = 'USD'): void {
+export function seedTestCurrency(code = 'USD', rate = 1.0): void {
   const db = getDb();
   db.prepare(
     `INSERT OR IGNORE INTO currencies (code, name, symbol, rate_to_usd) VALUES (?, ?, ?, ?)`,
-  ).run(code, code === 'USD' ? 'US Dollar' : code, code === 'USD' ? '$' : code, 1.0);
+  ).run(code, code === 'USD' ? 'US Dollar' : code, code === 'USD' ? '$' : code, rate);
 }
 
 export function seedTestEmployee(

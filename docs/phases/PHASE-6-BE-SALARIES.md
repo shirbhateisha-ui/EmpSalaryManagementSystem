@@ -11,24 +11,24 @@
 
 ### Salaries module
 
-- [ ] `salary.repository` — fetch history (effective_date desc), insert salary record,
+- [x] `salary.repository` — fetch history (effective_date desc), insert salary record,
       resolve latest-effective.
-- [ ] `salary.service` — adding a raise creates a new record; never overwrite history.
-- [ ] `salary.validation` — Zod schema for adding a salary record.
-- [ ] `salary.controller` + `salary.routes`.
-- [ ] Endpoints: `GET /employees/:id/salaries` (any role),
+- [x] `salary.service` — adding a raise creates a new record; never overwrite history.
+- [x] `salary.validation` — Zod schema for adding a salary record.
+- [x] `salary.controller` + `salary.routes`.
+- [x] Endpoints: `GET /employees/:id/salaries` (any role),
       `POST /employees/:id/salaries` (`authorize('HR_MANAGER')`).
 
 ### Integration with employees
 
-- [ ] Employee detail surfaces the current salary (via `v_current_salary`).
-- [ ] Adding a salary updates what the current-salary view returns.
+- [x] Employee detail surfaces the current salary (via `v_current_salary`).
+- [x] Adding a salary updates what the current-salary view returns.
 
 ### Tests
 
-- [ ] Latest-effective logic: with multiple records, the most recent effective_date
+- [x] Latest-effective logic: with multiple records, the most recent effective_date
       is returned as current.
-- [ ] Adding a raise appends a record and does not mutate prior records.
+- [x] Adding a raise appends a record and does not mutate prior records.
 
 ---
 
@@ -38,9 +38,9 @@
 
 ## Definition of Done
 
-- [ ] History returns records in descending effective-date order.
-- [ ] Posting a raise creates a new record and updates the current salary.
-- [ ] Latest-effective tests pass.
+- [x] History returns records in descending effective-date order.
+- [x] Posting a raise creates a new record and updates the current salary.
+- [x] Latest-effective tests pass.
 
 ## Suggested commits
 
