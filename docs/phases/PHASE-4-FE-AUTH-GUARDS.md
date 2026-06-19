@@ -15,17 +15,17 @@ login page, route/role guards, a user menu with logout, and the Admin users scre
 
 ### Auth feature
 
-- [ ] `features/auth` with `api/`, `components/`, `pages/`, `store/`, `types/`.
-- [ ] RTK Query `auth.api` (login, refresh, logout, me).
-- [ ] **Auth slice** holding access token + current user + status; persist enough to
+- [x] `features/auth` with `api/`, `components/`, `pages/`, `store/`, `types/`.
+- [x] RTK Query `auth.api` (login, refresh, logout, me).
+- [x] **Auth slice** holding access token + current user + status; persist enough to
       restore the session (refresh cookie does the heavy lifting).
-- [ ] `useAuth` hook exposing user, role, and `isAuthenticated`.
+- [x] `useAuth` hook exposing user, role, and `isAuthenticated`.
 
 ### Login & session
 
-- [ ] Login page + `LoginForm` (Shadcn + Zod) with error handling.
-- [ ] On load, attempt `refresh` / `me` to restore an existing session.
-- [ ] Header **user menu** with logout (calls `/auth/logout`, clears state).
+- [x] Login page + `LoginForm` (Shadcn + inline validation) with error handling.
+- [x] On load, attempt `refresh` / `me` to restore an existing session.
+- [x] Header **user menu** with logout (calls `/auth/logout`, clears state).
 
 ### Guards & routing
 

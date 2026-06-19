@@ -1,10 +1,15 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppShell } from '@/layouts/AppShell';
+import LoginPage from '@/features/auth/pages/LoginPage';
 import DashboardPage from '@/pages/DashboardPage';
 import EmployeesPage from '@/pages/EmployeesPage';
 import AnalyticsPage from '@/pages/AnalyticsPage';
 
 export const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
   {
     path: '/',
     element: <AppShell />,
