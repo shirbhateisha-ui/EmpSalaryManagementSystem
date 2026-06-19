@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
+import { COUNTRIES } from '@/lib/countries';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useAddSalaryMutation } from '../api/employees.api';
 import type { AddRaiseRequest } from '../types/employee.types';
@@ -103,13 +104,19 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
 
             <div className="space-y-1.5">
               <label htmlFor="ar-country" className="text-sm font-medium">Country</label>
-              <Input
+              <select
                 id="ar-country"
                 value={form.country}
                 onChange={(e) => set('country', e.target.value)}
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.country}
-              />
+                className={`flex h-9 w-full rounded-md border ${fieldErrors.country ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+              >
+                <option value="">-- Select Country --</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c.code} value={c.name}>{c.name}</option>
+                ))}
+              </select>
               {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
             </div>
 

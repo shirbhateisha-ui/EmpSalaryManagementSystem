@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
+import { COUNTRIES } from '@/lib/countries';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useUpdateEmployeeMutation } from '../api/employees.api';
 import type { Employee, UpdateEmployeeRequest } from '../types/employee.types';
@@ -58,9 +59,40 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             {(
               [
-                { key: 'name',          label: 'Name',          type: 'text' },
-                { key: 'email',         label: 'Email',         type: 'email' },
-                { key: 'country',       label: 'Country',       type: 'text' },
+                { key: 'name',  label: 'Name',  type: 'text' },
+                { key: 'email', label: 'Email', type: 'email' },
+              ] as const
+            ).map(({ key, label, type }) => (
+              <div key={key} className="space-y-1.5">
+                <label htmlFor={`ee-${key}`} className="text-sm font-medium">{label}</label>
+                <Input
+                  id={`ee-${key}`}
+                  type={type}
+                  value={form[key] ?? ''}
+                  onChange={(e) => set(key, e.target.value)}
+                  disabled={isLoading}
+                />
+              </div>
+            ))}
+
+            <div className="space-y-1.5">
+              <label htmlFor="ee-country" className="text-sm font-medium">Country</label>
+              <select
+                id="ee-country"
+                value={form.country ?? ''}
+                onChange={(e) => set('country', e.target.value)}
+                disabled={isLoading}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                <option value="">-- Select Country --</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c.code} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+
+            {(
+              [
                 { key: 'department',    label: 'Department',    type: 'text' },
                 { key: 'currency_code', label: 'Currency Code', type: 'text' },
               ] as const

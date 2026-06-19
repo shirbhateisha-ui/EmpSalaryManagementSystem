@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
+import { COUNTRIES } from '@/lib/countries';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useCreateEmployeeMutation } from '../api/employees.api';
 import type { CreateEmployeeRequest } from '../types/employee.types';
@@ -70,9 +71,45 @@ export function CreateEmployeeModal({ onClose }: Props) {
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             {(
               [
-                { key: 'name',          label: 'Name',          placeholder: 'Jane Smith',  type: 'text' },
-                { key: 'email',         label: 'Email',         placeholder: 'jane@co.com', type: 'email' },
-                { key: 'country',       label: 'Country',       placeholder: 'US',          type: 'text' },
+                { key: 'name',  label: 'Name',  placeholder: 'Jane Smith',  type: 'text' },
+                { key: 'email', label: 'Email', placeholder: 'jane@co.com', type: 'email' },
+              ] as const
+            ).map(({ key, label, placeholder, type }) => (
+              <div key={key} className="space-y-1.5">
+                <label htmlFor={`ce-${key}`} className="text-sm font-medium">{label}</label>
+                <Input
+                  id={`ce-${key}`}
+                  type={type}
+                  value={form[key] ?? ''}
+                  onChange={(e) => set(key, e.target.value)}
+                  placeholder={placeholder}
+                  disabled={isLoading}
+                  aria-invalid={!!fieldErrors[key]}
+                />
+                {fieldErrors[key] && <p className="text-xs text-destructive">{fieldErrors[key]}</p>}
+              </div>
+            ))}
+
+            <div className="space-y-1.5">
+              <label htmlFor="ce-country" className="text-sm font-medium">Country</label>
+              <select
+                id="ce-country"
+                value={form.country}
+                onChange={(e) => set('country', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.country}
+                className={`flex h-9 w-full rounded-md border ${fieldErrors.country ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+              >
+                <option value="">-- Select Country --</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c.code} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+              {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
+            </div>
+
+            {(
+              [
                 { key: 'department',    label: 'Department',    placeholder: 'Engineering', type: 'text' },
                 { key: 'currency_code', label: 'Currency Code', placeholder: 'USD',         type: 'text' },
               ] as const
