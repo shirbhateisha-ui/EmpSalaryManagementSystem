@@ -29,19 +29,19 @@ login page, route/role guards, a user menu with logout, and the Admin users scre
 
 ### Guards & routing
 
-- [ ] `AuthGuard` — redirect unauthenticated users to `/login`.
-- [ ] `RoleGuard` — block routes/actions by role; hide nav items the role can't access.
-- [ ] Wrap protected routes; mark `/login` public.
+- [x] `AuthGuard` — redirect unauthenticated users to `/login`.
+- [x] `RoleGuard` — block routes/actions by role; hide nav items the role can't access.
+- [x] Wrap protected routes; mark `/login` public.
 
 ### Users admin (Admin only)
 
-- [ ] `features/users` screen: list users, create user + assign role, deactivate.
-- [ ] Gate the screen and its nav entry behind `RoleGuard('ADMIN')`.
+- [x] `features/users` screen: list users, create user + assign role, deactivate.
+- [x] Gate the screen and its nav entry behind `RoleGuard('ADMIN')`.
 
 ### States & tests
 
-- [ ] Login handles **loading / error** states; invalid credentials surface a message.
-- [ ] Tests: login success/failure flow; `AuthGuard` redirect; `RoleGuard` hides/blocks;
+- [x] Login handles **loading / error** states; invalid credentials surface a message.
+- [x] Tests: login success/failure flow; `AuthGuard` redirect; `RoleGuard` hides/blocks;
       logout clears state.
 
 ---
@@ -52,10 +52,12 @@ login page, route/role guards, a user menu with logout, and the Admin users scre
 
 ## Definition of Done
 
-- [ ] Unauthenticated users are redirected to login; valid login lands in the app.
-- [ ] Expired access token is transparently refreshed (via Phase 3 baseQuery).
-- [ ] Role-restricted screens/actions are hidden/blocked for the wrong role.
-- [ ] Admin can manage users; auth flow + guard tests pass.
+- [x] Unauthenticated users are redirected to login; valid login lands in the app.
+- [x] Expired access token is transparently refreshed (via Phase 3 baseQuery).
+- [x] Role-restricted screens/actions are hidden/blocked for the wrong role.
+- [x] Admin can manage users; auth flow + guard tests pass.
+
+**Status:** ✅ Complete
 
 ## Suggested commits
 
