@@ -65,7 +65,7 @@ export function SalaryHistory({ employee }: SalaryHistoryProps) {
                     }).format(s.base_salary)}
                     {s.currency_code !== 'USD' && (
                       <span className="ml-2 text-xs text-muted-foreground">
-                        ≈ {USD.format(s.base_salary)}
+                        ≈ {USD.format(s.base_salary_usd)}
                       </span>
                     )}
                   </TableCell>

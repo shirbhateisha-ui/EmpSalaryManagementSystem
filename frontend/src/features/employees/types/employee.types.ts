@@ -37,6 +37,7 @@ export interface SalaryRecord {
   country: string;
   effective_date: string;
   created_at: string;
+  base_salary_usd: number;
 }
 
 export interface CreateEmployeeRequest {

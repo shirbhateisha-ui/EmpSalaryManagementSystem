@@ -1,17 +1,33 @@
 import { getDb } from '../../database/connection.js';
-import type { AddSalaryInput, SalaryRecord } from './salary.types.js';
+import type { AddSalaryInput, SalaryWithUsd } from './salary.types.js';
+
+// Selects a salary row joined to its currency, exposing base_salary_usd
+// (base_salary * rate_to_usd) — mirrors the v_current_salary view.
+const SALARY_WITH_USD = `
+  SELECT
+    s.id,
+    s.employee_id,
+    s.base_salary,
+    s.currency_code,
+    s.country,
+    s.effective_date,
+    s.created_at,
+    s.base_salary * c.rate_to_usd AS base_salary_usd
+  FROM salaries s
+  INNER JOIN currencies c ON c.code = s.currency_code
+`;
 
 export const salaryRepository = {
-  listByEmployee(employeeId: number): SalaryRecord[] {
+  listByEmployee(employeeId: number): SalaryWithUsd[] {
     const db = getDb();
     return db
       .prepare(
-        `SELECT * FROM salaries WHERE employee_id = ? ORDER BY effective_date DESC, id DESC`,
+        `${SALARY_WITH_USD} WHERE s.employee_id = ? ORDER BY s.effective_date DESC, s.id DESC`,
       )
-      .all(employeeId) as SalaryRecord[];
+      .all(employeeId) as SalaryWithUsd[];
   },
 
-  create(employeeId: number, input: AddSalaryInput): SalaryRecord {
+  create(employeeId: number, input: AddSalaryInput): SalaryWithUsd {
     const db = getDb();
     const now = new Date().toISOString();
     const result = db
@@ -29,7 +45,7 @@ export const salaryRepository = {
       );
 
     return db
-      .prepare('SELECT * FROM salaries WHERE id = ?')
-      .get(Number(result.lastInsertRowid)) as SalaryRecord;
+      .prepare(`${SALARY_WITH_USD} WHERE s.id = ?`)
+      .get(Number(result.lastInsertRowid)) as SalaryWithUsd;
   },
 };

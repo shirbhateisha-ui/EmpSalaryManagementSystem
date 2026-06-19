@@ -57,6 +57,29 @@ describe('Salary Repository', () => {
     expect(salaryRepository.listByEmployee(emp.id)).toEqual([]);
   });
 
+  it('normalizes base_salary to USD via rate_to_usd', () => {
+    seedTestCurrency('INR', 0.012);
+    const emp = seedTestEmployee({ currency_code: 'INR' });
+    seedTestSalary(emp.id, { base_salary: 5_000_000, currency_code: 'INR', effective_date: '2024-01-01' });
+
+    const [record] = salaryRepository.listByEmployee(emp.id);
+    expect(record.base_salary).toBe(5_000_000);
+    expect(record.base_salary_usd).toBeCloseTo(60_000, 5);
+  });
+
+  it('create returns a record with base_salary_usd computed', () => {
+    seedTestCurrency('EUR', 1.1);
+    const emp = seedTestEmployee({ currency_code: 'EUR' });
+    const salary = salaryRepository.create(emp.id, {
+      base_salary: 100_000,
+      currency_code: 'EUR',
+      country: 'DE',
+      effective_date: '2024-01-01',
+    });
+
+    expect(salary.base_salary_usd).toBeCloseTo(110_000, 5);
+  });
+
   it('latest-effective: v_current_salary reflects the most recent effective_date', () => {
     const emp = seedTestEmployee();
     seedTestSalary(emp.id, { base_salary: 50000, effective_date: '2023-01-01' });
