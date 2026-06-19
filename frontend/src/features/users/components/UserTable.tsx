@@ -61,6 +61,12 @@ export function UserTable({ users, currentUserId }: UserTableProps) {
   const [updateUser, { isLoading }] = useUpdateUserMutation();
 
   async function toggleStatus(user: User) {
+    if (user.status === 'active') {
+      const confirmed = window.confirm(
+        `Deactivate ${user.name}? They will lose access immediately.`,
+      );
+      if (!confirmed) return;
+    }
     const nextStatus: UserStatus = user.status === 'active' ? 'inactive' : 'active';
     await updateUser({ id: user.id, body: { status: nextStatus } });
   }

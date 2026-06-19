@@ -60,6 +60,12 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
     const errors = validate(form);
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) return;
+    if (form.status === 'inactive' && employee.status !== 'inactive') {
+      const confirmed = window.confirm(
+        `Set ${employee.name} to Inactive? They will be excluded from active headcount and reports.`,
+      );
+      if (!confirmed) return;
+    }
     try {
       await updateEmployee({ id: employee.id, body: form }).unwrap();
       onClose();
