@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
+import { cn } from '@/lib/utils';
+import { selectClassName } from '@/lib/styles';
 import { COUNTRIES } from '@/lib/countries';
 import { CURRENCIES } from '@/lib/currencies';
 import { DEPARTMENTS } from '@/lib/departments';
@@ -100,7 +102,7 @@ export function CreateEmployeeModal({ onClose }: Props) {
                 onChange={(e) => set('country', e.target.value)}
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.country}
-                className={`flex h-9 w-full rounded-md border ${fieldErrors.country ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+                className={cn(selectClassName, fieldErrors.country && 'border-destructive')}
               >
                 <option value="">-- Select Country --</option>
                 {COUNTRIES.map((c) => (
@@ -118,7 +120,7 @@ export function CreateEmployeeModal({ onClose }: Props) {
                 onChange={(e) => set('department', e.target.value)}
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.department}
-                className={`flex h-9 w-full rounded-md border ${fieldErrors.department ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+                className={cn(selectClassName, fieldErrors.department && 'border-destructive')}
               >
                 <option value="">-- Select Department --</option>
                 {DEPARTMENTS.map((d) => (
@@ -136,7 +138,7 @@ export function CreateEmployeeModal({ onClose }: Props) {
                 onChange={(e) => set('currency_code', e.target.value)}
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.currency_code}
-                className={`flex h-9 w-full rounded-md border ${fieldErrors.currency_code ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+                className={cn(selectClassName, fieldErrors.currency_code && 'border-destructive')}
               >
                 <option value="">-- Select Currency --</option>
                 {CURRENCIES.map((c) => (
@@ -165,7 +167,7 @@ export function CreateEmployeeModal({ onClose }: Props) {
                 value={form.status}
                 onChange={(e) => set('status', e.target.value)}
                 disabled={isLoading}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className={selectClassName}
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>

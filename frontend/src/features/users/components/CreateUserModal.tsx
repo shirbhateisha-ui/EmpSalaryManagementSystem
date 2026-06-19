@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { selectClassName } from '@/lib/styles';
 import type { ApiErrorResponse } from '@/types/api.types';
 import type { Role } from '@/features/auth/types/auth.types';
 import { useCreateUserMutation } from '../api/users.api';
@@ -137,7 +138,7 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
                 value={form.role}
                 onChange={(e) => set('role', e.target.value)}
                 disabled={isLoading}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className={selectClassName}
               >
                 {ROLES.map((r) => (
                   <option key={r.value} value={r.value}>{r.label}</option>
