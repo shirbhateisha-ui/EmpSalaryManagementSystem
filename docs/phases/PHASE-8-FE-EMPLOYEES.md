@@ -13,30 +13,30 @@ all four UI states handled.
 
 ### Employees feature scaffolding
 
-- [ ] `features/employees` with `api/`, `components/`, `pages/`, `types/`.
-- [ ] RTK Query `employees.api` (list, getById, create, update).
-- [ ] Filter UI state slice (search term, country, department, status, sort, page).
+- [x] `features/employees` with `api/`, `components/`, `pages/`, `types/`.
+- [x] RTK Query `employees.api` (list, getById, create, update).
+- [x] Filter UI state slice (search term, country, department, status, sort, page).
 
 ### List view
 
-- [ ] Data table with columns (name, email, country, department, current salary, status).
-- [ ] Search input with **debounce** (single query per keystroke burst).
-- [ ] Filters (country, department, status) and sortable columns.
-- [ ] Pagination controls bound to `meta` (`page`, `totalPages`, `hasNext/hasPrev`).
-- [ ] Render **loading / empty / error / data** states.
+- [x] Data table with columns (name, email, country, department, current salary, status).
+- [x] Search input with **debounce** (single query per keystroke burst).
+- [x] Filters (country, department, status) and sortable columns.
+- [x] Pagination controls bound to `meta` (`page`, `totalPages`, `hasNext/hasPrev`).
+- [x] Render **loading / empty / error / data** states.
 
 ### Detail & forms
 
-- [ ] Employee detail page showing profile + **salary history** (and add-raise action).
-- [ ] Create employee form (Shadcn + Zod validation).
-- [ ] Edit employee form; optimistic or refetch-on-success update.
-- [ ] Create / edit / add-raise actions are shown only to `HR_MANAGER`/`ADMIN`
+- [x] Employee detail page showing profile + **salary history** (and add-raise action).
+- [x] Create employee form (Shadcn + Zod validation).
+- [x] Edit employee form; optimistic or refetch-on-success update.
+- [x] Create / edit / add-raise actions are shown only to `HR_MANAGER`/`ADMIN`
       (via `RoleGuard`); Viewers see read-only screens.
 
 ### Tests
 
-- [ ] List renders loading / empty / error / data states (RTL + MSW).
-- [ ] Search debounces and filters/pagination update results.
+- [x] List renders loading / empty / error / data states (RTL + MSW).
+- [x] Search debounces and filters/pagination update results.
 
 ---
 
@@ -46,10 +46,10 @@ all four UI states handled.
 
 ## Definition of Done
 
-- [ ] List performs well over the 10k dataset (server-side paginate/filter/sort).
-- [ ] Create/edit validate input and reflect changes after success.
-- [ ] Detail shows salary history and supports adding a raise.
-- [ ] List-state and filter tests pass.
+- [x] List performs well over the 10k dataset (server-side paginate/filter/sort).
+- [x] Create/edit validate input and reflect changes after success.
+- [x] Detail shows salary history and supports adding a raise.
+- [x] List-state and filter tests pass.
 
 ## Suggested commits
 
