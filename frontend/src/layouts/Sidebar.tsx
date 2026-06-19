@@ -2,12 +2,19 @@ import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { mainNavItems } from '@/config/navigation';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 interface SidebarProps {
   onNavigate?: () => void;
 }
 
 export function Sidebar({ onNavigate }: SidebarProps) {
+  const { role } = useAuth();
+
+  const visibleItems = mainNavItems.filter(
+    (item) => !item.requiresRole || (role && item.requiresRole.includes(role)),
+  );
+
   return (
     <aside className="flex h-full w-64 flex-col border-r bg-card">
       <div className="border-b px-6 py-5">
@@ -18,7 +25,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       </div>
 
       <nav className="flex-1 space-y-1 p-4">
-        {mainNavItems.map((item) => (
+        {visibleItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}

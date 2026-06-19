@@ -4,10 +4,19 @@ export interface ApiErrorBody {
   details?: unknown;
 }
 
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
 export interface ApiSuccessResponse<T> {
   success: true;
   data: T;
-  meta?: Record<string, unknown>;
+  meta?: PaginationMeta;
 }
 
 export interface ApiErrorResponse {

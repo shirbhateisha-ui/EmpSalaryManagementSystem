@@ -6,7 +6,7 @@ import {
   type FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 import {
-  clearAccessToken,
+  clearCredentials,
   setAccessToken,
 } from '@/features/auth/store/auth.slice';
 import type { ApiSuccessResponse } from '@/types/api.types';
@@ -45,7 +45,7 @@ export const baseQueryWithReauth: BaseQueryFn<
       api.dispatch(setAccessToken(refreshData.data.accessToken));
       result = await rawBaseQuery(args, api, extraOptions);
     } else {
-      api.dispatch(clearAccessToken());
+      api.dispatch(clearCredentials());
     }
   }
 
