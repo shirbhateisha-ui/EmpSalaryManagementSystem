@@ -3,6 +3,12 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DatePicker } from '@/components/ui/date-picker';
+import { cn } from '@/lib/utils';
+import { selectClassName } from '@/lib/styles';
+import { COUNTRIES } from '@/lib/countries';
+import { CURRENCIES } from '@/lib/currencies';
+import { DEPARTMENTS } from '@/lib/departments';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useCreateEmployeeMutation } from '../api/employees.api';
 import type { CreateEmployeeRequest } from '../types/employee.types';
@@ -69,12 +75,8 @@ export function CreateEmployeeModal({ onClose }: Props) {
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             {(
               [
-                { key: 'name',          label: 'Name',          placeholder: 'Jane Smith',   type: 'text' },
-                { key: 'email',         label: 'Email',         placeholder: 'jane@co.com',  type: 'email' },
-                { key: 'country',       label: 'Country',       placeholder: 'US',           type: 'text' },
-                { key: 'department',    label: 'Department',    placeholder: 'Engineering',  type: 'text' },
-                { key: 'currency_code', label: 'Currency Code', placeholder: 'USD',          type: 'text' },
-                { key: 'joining_date',  label: 'Joining Date',  placeholder: 'YYYY-MM-DD',   type: 'text' },
+                { key: 'name',  label: 'Name',  placeholder: 'Jane Smith',  type: 'text' },
+                { key: 'email', label: 'Email', placeholder: 'jane@co.com', type: 'email' },
               ] as const
             ).map(({ key, label, placeholder, type }) => (
               <div key={key} className="space-y-1.5">
@@ -93,13 +95,79 @@ export function CreateEmployeeModal({ onClose }: Props) {
             ))}
 
             <div className="space-y-1.5">
+              <label htmlFor="ce-country" className="text-sm font-medium">Country</label>
+              <select
+                id="ce-country"
+                value={form.country}
+                onChange={(e) => set('country', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.country}
+                className={cn(selectClassName, fieldErrors.country && 'border-destructive')}
+              >
+                <option value="">-- Select Country --</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c.code} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+              {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="ce-department" className="text-sm font-medium">Department</label>
+              <select
+                id="ce-department"
+                value={form.department}
+                onChange={(e) => set('department', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.department}
+                className={cn(selectClassName, fieldErrors.department && 'border-destructive')}
+              >
+                <option value="">-- Select Department --</option>
+                {DEPARTMENTS.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+              {fieldErrors.department && <p className="text-xs text-destructive">{fieldErrors.department}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="ce-currency_code" className="text-sm font-medium">Currency Code</label>
+              <select
+                id="ce-currency_code"
+                value={form.currency_code}
+                onChange={(e) => set('currency_code', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.currency_code}
+                className={cn(selectClassName, fieldErrors.currency_code && 'border-destructive')}
+              >
+                <option value="">-- Select Currency --</option>
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                ))}
+              </select>
+              {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Joining Date</label>
+              <DatePicker
+                value={form.joining_date}
+                onChange={(v) => set('joining_date', v)}
+                disabled={isLoading}
+                placeholder="Pick a date"
+                aria-invalid={!!fieldErrors.joining_date}
+              />
+              {fieldErrors.joining_date && <p className="text-xs text-destructive">{fieldErrors.joining_date}</p>}
+            </div>
+
+            <div className="space-y-1.5">
               <label htmlFor="ce-status" className="text-sm font-medium">Status</label>
               <select
                 id="ce-status"
                 value={form.status}
                 onChange={(e) => set('status', e.target.value)}
                 disabled={isLoading}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className={selectClassName}
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>

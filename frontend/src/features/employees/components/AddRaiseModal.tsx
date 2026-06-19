@@ -3,6 +3,11 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DatePicker } from '@/components/ui/date-picker';
+import { cn } from '@/lib/utils';
+import { selectClassName } from '@/lib/styles';
+import { COUNTRIES } from '@/lib/countries';
+import { CURRENCIES } from '@/lib/currencies';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useAddSalaryMutation } from '../api/employees.api';
 import type { AddRaiseRequest } from '../types/employee.types';
@@ -89,38 +94,47 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
 
             <div className="space-y-1.5">
               <label htmlFor="ar-currency" className="text-sm font-medium">Currency Code</label>
-              <Input
+              <select
                 id="ar-currency"
                 value={form.currency_code}
-                onChange={(e) => set('currency_code', e.target.value.toUpperCase())}
-                placeholder="USD"
+                onChange={(e) => set('currency_code', e.target.value)}
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.currency_code}
-              />
+                className={cn(selectClassName, fieldErrors.currency_code && 'border-destructive')}
+              >
+                <option value="">-- Select Currency --</option>
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                ))}
+              </select>
               {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
             </div>
 
             <div className="space-y-1.5">
               <label htmlFor="ar-country" className="text-sm font-medium">Country</label>
-              <Input
+              <select
                 id="ar-country"
                 value={form.country}
                 onChange={(e) => set('country', e.target.value)}
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.country}
-              />
+                className={cn(selectClassName, fieldErrors.country && 'border-destructive')}
+              >
+                <option value="">-- Select Country --</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c.code} value={c.name}>{c.name}</option>
+                ))}
+              </select>
               {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="ar-date" className="text-sm font-medium">Effective Date</label>
-              <Input
-                id="ar-date"
-                type="text"
+              <label className="text-sm font-medium">Effective Date</label>
+              <DatePicker
                 value={form.effective_date}
-                onChange={(e) => set('effective_date', e.target.value)}
-                placeholder="YYYY-MM-DD"
+                onChange={(v) => set('effective_date', v)}
                 disabled={isLoading}
+                placeholder="Pick a date"
                 aria-invalid={!!fieldErrors.effective_date}
               />
               {fieldErrors.effective_date && <p className="text-xs text-destructive">{fieldErrors.effective_date}</p>}

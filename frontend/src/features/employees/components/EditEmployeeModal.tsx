@@ -3,6 +3,12 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DatePicker } from '@/components/ui/date-picker';
+import { cn } from '@/lib/utils';
+import { selectClassName } from '@/lib/styles';
+import { COUNTRIES } from '@/lib/countries';
+import { CURRENCIES } from '@/lib/currencies';
+import { DEPARTMENTS } from '@/lib/departments';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useUpdateEmployeeMutation } from '../api/employees.api';
 import type { Employee, UpdateEmployeeRequest } from '../types/employee.types';
@@ -20,6 +26,19 @@ function extractApiError(error: unknown): string {
   return 'Something went wrong. Please try again.';
 }
 
+function validate(f: UpdateEmployeeRequest) {
+  const e: Partial<Record<keyof UpdateEmployeeRequest, string>> = {};
+  if (!f.name?.trim())          e.name          = 'Name is required';
+  if (!f.email?.trim())         e.email         = 'Email is required';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) e.email = 'Enter a valid email';
+  if (!f.country?.trim())       e.country       = 'Country is required';
+  if (!f.department?.trim())    e.department    = 'Department is required';
+  if (!f.currency_code?.trim()) e.currency_code = 'Currency code is required';
+  if (!f.joining_date)          e.joining_date  = 'Joining date is required';
+  else if (!/^\d{4}-\d{2}-\d{2}$/.test(f.joining_date)) e.joining_date = 'Use YYYY-MM-DD format';
+  return e;
+}
+
 export function EditEmployeeModal({ employee, onClose }: Props) {
   const [form, setForm] = useState<UpdateEmployeeRequest>({
     name:          employee.name,
@@ -30,14 +49,25 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
     joining_date:  employee.joining_date,
     status:        employee.status,
   });
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof UpdateEmployeeRequest, string>>>({});
   const [updateEmployee, { isLoading, error }] = useUpdateEmployeeMutation();
 
   function set(key: keyof UpdateEmployeeRequest, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
+    setFieldErrors((e) => ({ ...e, [key]: undefined }));
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    const errors = validate(form);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+    if (form.status === 'inactive' && employee.status !== 'inactive') {
+      const confirmed = window.confirm(
+        `Set ${employee.name} to Inactive? They will be excluded from active headcount and reports.`,
+      );
+      if (!confirmed) return;
+    }
     try {
       await updateEmployee({ id: employee.id, body: form }).unwrap();
       onClose();
@@ -57,12 +87,8 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             {(
               [
-                { key: 'name',          label: 'Name',          type: 'text' },
-                { key: 'email',         label: 'Email',         type: 'email' },
-                { key: 'country',       label: 'Country',       type: 'text' },
-                { key: 'department',    label: 'Department',    type: 'text' },
-                { key: 'currency_code', label: 'Currency Code', type: 'text' },
-                { key: 'joining_date',  label: 'Joining Date',  type: 'text' },
+                { key: 'name',  label: 'Name',  type: 'text' },
+                { key: 'email', label: 'Email', type: 'email' },
               ] as const
             ).map(({ key, label, type }) => (
               <div key={key} className="space-y-1.5">
@@ -73,9 +99,77 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                   value={form[key] ?? ''}
                   onChange={(e) => set(key, e.target.value)}
                   disabled={isLoading}
+                  aria-invalid={!!fieldErrors[key]}
                 />
+                {fieldErrors[key] && <p className="text-xs text-destructive">{fieldErrors[key]}</p>}
               </div>
             ))}
+
+            <div className="space-y-1.5">
+              <label htmlFor="ee-country" className="text-sm font-medium">Country</label>
+              <select
+                id="ee-country"
+                value={form.country ?? ''}
+                onChange={(e) => set('country', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.country}
+                className={cn(selectClassName, fieldErrors.country && 'border-destructive')}
+              >
+                <option value="">-- Select Country --</option>
+                {COUNTRIES.map((c) => (
+                  <option key={c.code} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+              {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="ee-department" className="text-sm font-medium">Department</label>
+              <select
+                id="ee-department"
+                value={form.department ?? ''}
+                onChange={(e) => set('department', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.department}
+                className={cn(selectClassName, fieldErrors.department && 'border-destructive')}
+              >
+                <option value="">-- Select Department --</option>
+                {DEPARTMENTS.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+              {fieldErrors.department && <p className="text-xs text-destructive">{fieldErrors.department}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="ee-currency_code" className="text-sm font-medium">Currency Code</label>
+              <select
+                id="ee-currency_code"
+                value={form.currency_code ?? ''}
+                onChange={(e) => set('currency_code', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.currency_code}
+                className={cn(selectClassName, fieldErrors.currency_code && 'border-destructive')}
+              >
+                <option value="">-- Select Currency --</option>
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                ))}
+              </select>
+              {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Joining Date</label>
+              <DatePicker
+                value={form.joining_date ?? ''}
+                onChange={(v) => set('joining_date', v)}
+                disabled={isLoading}
+                placeholder="Pick a date"
+                aria-invalid={!!fieldErrors.joining_date}
+              />
+              {fieldErrors.joining_date && <p className="text-xs text-destructive">{fieldErrors.joining_date}</p>}
+            </div>
 
             <div className="space-y-1.5">
               <label htmlFor="ee-status" className="text-sm font-medium">Status</label>
@@ -84,7 +178,7 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 value={form.status}
                 onChange={(e) => set('status', e.target.value)}
                 disabled={isLoading}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className={selectClassName}
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
