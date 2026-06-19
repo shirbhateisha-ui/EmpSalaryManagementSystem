@@ -1,6 +1,7 @@
 import { closeDb, getDb } from '../../database/connection.js';
 import { runMigrations } from '../../database/migrate.js';
 import { hashPasswordSync } from '../../shared/utils/password.utils.js';
+import type { EmployeeRecord } from '../../modules/employees/employee.types.js';
 
 export function resetTestDatabase(): void {
   closeDb();
@@ -43,6 +44,48 @@ export function seedTestUsers(): {
     admin: { email: 'admin@test.com', password: adminPassword },
     viewer: { email: 'viewer@test.com', password: viewerPassword },
   };
+}
+
+export function seedTestCurrency(code = 'USD'): void {
+  const db = getDb();
+  db.prepare(
+    `INSERT OR IGNORE INTO currencies (code, name, symbol, rate_to_usd) VALUES (?, ?, ?, ?)`,
+  ).run(code, code === 'USD' ? 'US Dollar' : code, code === 'USD' ? '$' : code, 1.0);
+}
+
+export function seedTestEmployee(
+  override: Partial<Omit<EmployeeRecord, 'id' | 'created_at' | 'updated_at'>> = {},
+): EmployeeRecord & { id: number } {
+  const db = getDb();
+  const now = new Date().toISOString();
+  const data = {
+    name: override.name ?? 'Test Employee',
+    email: override.email ?? 'employee@test.com',
+    country: override.country ?? 'US',
+    department: override.department ?? 'Engineering',
+    currency_code: override.currency_code ?? 'USD',
+    status: override.status ?? 'active',
+    joining_date: override.joining_date ?? '2024-01-01',
+  };
+
+  const result = db
+    .prepare(
+      `INSERT INTO employees (name, email, country, department, currency_code, status, joining_date, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+    .run(
+      data.name,
+      data.email.toLowerCase(),
+      data.country,
+      data.department,
+      data.currency_code,
+      data.status,
+      data.joining_date,
+      now,
+      now,
+    );
+
+  return { id: Number(result.lastInsertRowid), ...data, created_at: now, updated_at: now };
 }
 
 export function extractRefreshCookie(cookies: string | string[] | undefined): string {
