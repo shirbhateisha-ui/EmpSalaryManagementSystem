@@ -7,7 +7,7 @@ import UsersPage from '@/features/users/pages/UsersPage';
 import EmployeesPage from '@/features/employees/pages/EmployeesPage';
 import EmployeeDetailPage from '@/features/employees/pages/EmployeeDetailPage';
 import DashboardPage from '@/pages/DashboardPage';
-import AnalyticsPage from '@/pages/AnalyticsPage';
+import AnalyticsPage from '@/features/analytics/pages/AnalyticsPage';
 
 export const router = createBrowserRouter([
   {

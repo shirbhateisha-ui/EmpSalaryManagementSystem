@@ -12,7 +12,7 @@ export interface NavItem {
 
 export const mainNavItems: NavItem[] = [
   { label: 'Dashboard', path: '/', icon: LayoutDashboard },
-  { label: 'Employees', path: '/employees', icon: Users, comingSoon: true },
-  { label: 'Analytics', path: '/analytics', icon: BarChart3, comingSoon: true },
+  { label: 'Employees', path: '/employees', icon: Users },
+  { label: 'Analytics', path: '/analytics', icon: BarChart3 },
   { label: 'User Management', path: '/users', icon: Shield, requiresRole: ['ADMIN'] },
 ];
