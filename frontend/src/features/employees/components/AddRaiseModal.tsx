@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
 import { COUNTRIES } from '@/lib/countries';
+import { CURRENCIES } from '@/lib/currencies';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useAddSalaryMutation } from '../api/employees.api';
 import type { AddRaiseRequest } from '../types/employee.types';
@@ -91,14 +92,19 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
 
             <div className="space-y-1.5">
               <label htmlFor="ar-currency" className="text-sm font-medium">Currency Code</label>
-              <Input
+              <select
                 id="ar-currency"
                 value={form.currency_code}
-                onChange={(e) => set('currency_code', e.target.value.toUpperCase())}
-                placeholder="USD"
+                onChange={(e) => set('currency_code', e.target.value)}
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.currency_code}
-              />
+                className={`flex h-9 w-full rounded-md border ${fieldErrors.currency_code ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+              >
+                <option value="">-- Select Currency --</option>
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                ))}
+              </select>
               {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
             </div>
 

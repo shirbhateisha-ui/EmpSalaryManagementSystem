@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
 import { COUNTRIES } from '@/lib/countries';
+import { CURRENCIES } from '@/lib/currencies';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useUpdateEmployeeMutation } from '../api/employees.api';
 import type { Employee, UpdateEmployeeRequest } from '../types/employee.types';
@@ -91,23 +92,32 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
               </select>
             </div>
 
-            {(
-              [
-                { key: 'department',    label: 'Department',    type: 'text' },
-                { key: 'currency_code', label: 'Currency Code', type: 'text' },
-              ] as const
-            ).map(({ key, label, type }) => (
-              <div key={key} className="space-y-1.5">
-                <label htmlFor={`ee-${key}`} className="text-sm font-medium">{label}</label>
-                <Input
-                  id={`ee-${key}`}
-                  type={type}
-                  value={form[key] ?? ''}
-                  onChange={(e) => set(key, e.target.value)}
-                  disabled={isLoading}
-                />
-              </div>
-            ))}
+            <div className="space-y-1.5">
+              <label htmlFor="ee-department" className="text-sm font-medium">Department</label>
+              <Input
+                id="ee-department"
+                type="text"
+                value={form.department ?? ''}
+                onChange={(e) => set('department', e.target.value)}
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="ee-currency_code" className="text-sm font-medium">Currency Code</label>
+              <select
+                id="ee-currency_code"
+                value={form.currency_code ?? ''}
+                onChange={(e) => set('currency_code', e.target.value)}
+                disabled={isLoading}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                <option value="">-- Select Currency --</option>
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                ))}
+              </select>
+            </div>
 
             <div className="space-y-1.5">
               <label className="text-sm font-medium">Joining Date</label>

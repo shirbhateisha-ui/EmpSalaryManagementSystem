@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DatePicker } from '@/components/ui/date-picker';
 import { COUNTRIES } from '@/lib/countries';
+import { CURRENCIES } from '@/lib/currencies';
 import type { ApiErrorResponse } from '@/types/api.types';
 import { useCreateEmployeeMutation } from '../api/employees.api';
 import type { CreateEmployeeRequest } from '../types/employee.types';
@@ -108,26 +109,37 @@ export function CreateEmployeeModal({ onClose }: Props) {
               {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
             </div>
 
-            {(
-              [
-                { key: 'department',    label: 'Department',    placeholder: 'Engineering', type: 'text' },
-                { key: 'currency_code', label: 'Currency Code', placeholder: 'USD',         type: 'text' },
-              ] as const
-            ).map(({ key, label, placeholder, type }) => (
-              <div key={key} className="space-y-1.5">
-                <label htmlFor={`ce-${key}`} className="text-sm font-medium">{label}</label>
-                <Input
-                  id={`ce-${key}`}
-                  type={type}
-                  value={form[key] ?? ''}
-                  onChange={(e) => set(key, e.target.value)}
-                  placeholder={placeholder}
-                  disabled={isLoading}
-                  aria-invalid={!!fieldErrors[key]}
-                />
-                {fieldErrors[key] && <p className="text-xs text-destructive">{fieldErrors[key]}</p>}
-              </div>
-            ))}
+            <div className="space-y-1.5">
+              <label htmlFor="ce-department" className="text-sm font-medium">Department</label>
+              <Input
+                id="ce-department"
+                type="text"
+                value={form.department ?? ''}
+                onChange={(e) => set('department', e.target.value)}
+                placeholder="Engineering"
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.department}
+              />
+              {fieldErrors.department && <p className="text-xs text-destructive">{fieldErrors.department}</p>}
+            </div>
+
+            <div className="space-y-1.5">
+              <label htmlFor="ce-currency_code" className="text-sm font-medium">Currency Code</label>
+              <select
+                id="ce-currency_code"
+                value={form.currency_code}
+                onChange={(e) => set('currency_code', e.target.value)}
+                disabled={isLoading}
+                aria-invalid={!!fieldErrors.currency_code}
+                className={`flex h-9 w-full rounded-md border ${fieldErrors.currency_code ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
+              >
+                <option value="">-- Select Currency --</option>
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                ))}
+              </select>
+              {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
+            </div>
 
             <div className="space-y-1.5">
               <label className="text-sm font-medium">Joining Date</label>
