@@ -12,23 +12,23 @@ questions via deterministic SQL aggregations, with all amounts normalized to USD
 
 ### Analytics module
 
-- [ ] `currency.utils` / SQL conversion — amounts to USD via `rate_to_usd`.
-- [ ] `analytics.repository` — aggregation SQL over `v_current_salary`.
-- [ ] `analytics.service` — monthly = annual / 12; distribution bucketing; top-N.
-- [ ] `analytics.controller` + `analytics.routes` (all guarded by `authenticate`; any role).
+- [x] `currency.utils` / SQL conversion — amounts to USD via `rate_to_usd`.
+- [x] `analytics.repository` — aggregation SQL over `v_current_salary`.
+- [x] `analytics.service` — monthly = annual / 12; distribution bucketing; top-N.
+- [x] `analytics.controller` + `analytics.routes` (all guarded by `authenticate`; any role).
 
 ### Endpoints
 
-- [ ] `GET /analytics/summary` — total (annual + monthly), avg, min, max, headcount (USD).
-- [ ] `GET /analytics/by-country` — payroll + avg + headcount per country.
-- [ ] `GET /analytics/by-department` — payroll + avg + headcount per department.
-- [ ] `GET /analytics/distribution` — salary band histogram.
-- [ ] `GET /analytics/top-earners?limit=10` — top-N highest paid.
+- [x] `GET /analytics/summary` — total (annual + monthly), avg, min, max, headcount (USD).
+- [x] `GET /analytics/by-country` — payroll + avg + headcount per country.
+- [x] `GET /analytics/by-department` — payroll + avg + headcount per department.
+- [x] `GET /analytics/distribution` — salary band histogram.
+- [x] `GET /analytics/top-earners?limit=10` — top-N highest paid.
 
 ### Tests
 
-- [ ] Aggregation correctness against hand-computed fixtures (mixed currencies).
-- [ ] Monthly = annual / 12; distribution bucket boundaries; top-N ordering.
+- [x] Aggregation correctness against hand-computed fixtures (mixed currencies).
+- [x] Monthly = annual / 12; distribution bucket boundaries; top-N ordering.
 
 ---
 
@@ -38,9 +38,9 @@ questions via deterministic SQL aggregations, with all amounts normalized to USD
 
 ## Definition of Done
 
-- [ ] Cross-currency totals match a manual SQL calculation.
-- [ ] All analytics endpoints return the standard envelope.
-- [ ] Aggregation correctness fixtures pass.
+- [x] Cross-currency totals match a manual SQL calculation.
+- [x] All analytics endpoints return the standard envelope.
+- [x] Aggregation correctness fixtures pass.
 
 ## Suggested commits
 
