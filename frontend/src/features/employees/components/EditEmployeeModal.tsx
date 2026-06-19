@@ -24,6 +24,19 @@ function extractApiError(error: unknown): string {
   return 'Something went wrong. Please try again.';
 }
 
+function validate(f: UpdateEmployeeRequest) {
+  const e: Partial<Record<keyof UpdateEmployeeRequest, string>> = {};
+  if (!f.name?.trim())          e.name          = 'Name is required';
+  if (!f.email?.trim())         e.email         = 'Email is required';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) e.email = 'Enter a valid email';
+  if (!f.country?.trim())       e.country       = 'Country is required';
+  if (!f.department?.trim())    e.department    = 'Department is required';
+  if (!f.currency_code?.trim()) e.currency_code = 'Currency code is required';
+  if (!f.joining_date)          e.joining_date  = 'Joining date is required';
+  else if (!/^\d{4}-\d{2}-\d{2}$/.test(f.joining_date)) e.joining_date = 'Use YYYY-MM-DD format';
+  return e;
+}
+
 export function EditEmployeeModal({ employee, onClose }: Props) {
   const [form, setForm] = useState<UpdateEmployeeRequest>({
     name:          employee.name,
@@ -34,14 +47,19 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
     joining_date:  employee.joining_date,
     status:        employee.status,
   });
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof UpdateEmployeeRequest, string>>>({});
   const [updateEmployee, { isLoading, error }] = useUpdateEmployeeMutation();
 
   function set(key: keyof UpdateEmployeeRequest, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
+    setFieldErrors((e) => ({ ...e, [key]: undefined }));
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    const errors = validate(form);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) return;
     try {
       await updateEmployee({ id: employee.id, body: form }).unwrap();
       onClose();
@@ -73,7 +91,9 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                   value={form[key] ?? ''}
                   onChange={(e) => set(key, e.target.value)}
                   disabled={isLoading}
+                  aria-invalid={!!fieldErrors[key]}
                 />
+                {fieldErrors[key] && <p className="text-xs text-destructive">{fieldErrors[key]}</p>}
               </div>
             ))}
 
@@ -84,13 +104,15 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 value={form.country ?? ''}
                 onChange={(e) => set('country', e.target.value)}
                 disabled={isLoading}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                aria-invalid={!!fieldErrors.country}
+                className={`flex h-9 w-full rounded-md border ${fieldErrors.country ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
               >
                 <option value="">-- Select Country --</option>
                 {COUNTRIES.map((c) => (
                   <option key={c.code} value={c.name}>{c.name}</option>
                 ))}
               </select>
+              {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
             </div>
 
             <div className="space-y-1.5">
@@ -100,13 +122,15 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 value={form.department ?? ''}
                 onChange={(e) => set('department', e.target.value)}
                 disabled={isLoading}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                aria-invalid={!!fieldErrors.department}
+                className={`flex h-9 w-full rounded-md border ${fieldErrors.department ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
               >
                 <option value="">-- Select Department --</option>
                 {DEPARTMENTS.map((d) => (
                   <option key={d} value={d}>{d}</option>
                 ))}
               </select>
+              {fieldErrors.department && <p className="text-xs text-destructive">{fieldErrors.department}</p>}
             </div>
 
             <div className="space-y-1.5">
@@ -116,13 +140,15 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 value={form.currency_code ?? ''}
                 onChange={(e) => set('currency_code', e.target.value)}
                 disabled={isLoading}
-                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                aria-invalid={!!fieldErrors.currency_code}
+                className={`flex h-9 w-full rounded-md border ${fieldErrors.currency_code ? 'border-destructive' : 'border-input'} bg-background px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`}
               >
                 <option value="">-- Select Currency --</option>
                 {CURRENCIES.map((c) => (
                   <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
                 ))}
               </select>
+              {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
             </div>
 
             <div className="space-y-1.5">
@@ -132,7 +158,9 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 onChange={(v) => set('joining_date', v)}
                 disabled={isLoading}
                 placeholder="Pick a date"
+                aria-invalid={!!fieldErrors.joining_date}
               />
+              {fieldErrors.joining_date && <p className="text-xs text-destructive">{fieldErrors.joining_date}</p>}
             </div>
 
             <div className="space-y-1.5">
