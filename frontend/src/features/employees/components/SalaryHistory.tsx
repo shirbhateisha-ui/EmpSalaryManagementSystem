@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 import { LoadingState } from '@/components/states/LoadingState';
 import { EmptyState } from '@/components/states/EmptyState';
@@ -11,7 +16,11 @@ import { useGetEmployeeSalariesQuery } from '../api/employees.api';
 import { AddRaiseModal } from './AddRaiseModal';
 import type { Employee } from '../types/employee.types';
 
-const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const USD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
 
 interface SalaryHistoryProps {
   employee: Employee;
@@ -39,7 +48,10 @@ export function SalaryHistory({ employee }: SalaryHistoryProps) {
       {isLoading && <LoadingState message="Loading salary history…" />}
 
       {!isLoading && salaries?.length === 0 && (
-        <EmptyState title="No salary records" description="No salary history found for this employee." />
+        <EmptyState
+          title="No salary records"
+          description="No salary history found for this employee."
+        />
       )}
 
       {!isLoading && salaries && salaries.length > 0 && (

@@ -19,10 +19,9 @@ export const updateUserSchema = z
     status: z.enum(['active', 'inactive']).optional(),
     password: z.string().min(8).optional(),
   })
-  .refine(
-    (data) => Object.keys(data).length > 0,
-    { message: 'At least one field must be provided' },
-  );
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field must be provided',
+  });
 
 export const userIdParamSchema = z.object({
   id: z.coerce.number().int().positive(),

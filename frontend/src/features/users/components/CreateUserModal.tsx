@@ -44,7 +44,9 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
     password: '',
     role: 'VIEWER',
   });
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof CreateUserRequest, string>>>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof CreateUserRequest, string>>>(
+    {},
+  );
   const [createUser, { isLoading, error }] = useCreateUserMutation();
 
   function set(key: keyof CreateUserRequest, value: string) {
@@ -75,7 +77,9 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
     >
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle id="create-user-title" className="text-lg">Add User</CardTitle>
+          <CardTitle id="create-user-title" className="text-lg">
+            Add User
+          </CardTitle>
           <button
             type="button"
             onClick={onClose}
@@ -89,7 +93,9 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
         <CardContent>
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             <div className="space-y-1.5">
-              <label htmlFor="cu-name" className="text-sm font-medium">Name</label>
+              <label htmlFor="cu-name" className="text-sm font-medium">
+                Name
+              </label>
               <Input
                 id="cu-name"
                 value={form.name}
@@ -102,7 +108,9 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="cu-email" className="text-sm font-medium">Email</label>
+              <label htmlFor="cu-email" className="text-sm font-medium">
+                Email
+              </label>
               <Input
                 id="cu-email"
                 type="email"
@@ -116,7 +124,9 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="cu-password" className="text-sm font-medium">Password</label>
+              <label htmlFor="cu-password" className="text-sm font-medium">
+                Password
+              </label>
               <Input
                 id="cu-password"
                 type="password"
@@ -132,7 +142,9 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="cu-role" className="text-sm font-medium">Role</label>
+              <label htmlFor="cu-role" className="text-sm font-medium">
+                Role
+              </label>
               <select
                 id="cu-role"
                 value={form.role}
@@ -141,7 +153,9 @@ export function CreateUserModal({ onClose }: CreateUserModalProps) {
                 className={selectClassName}
               >
                 {ROLES.map((r) => (
-                  <option key={r.value} value={r.value}>{r.label}</option>
+                  <option key={r.value} value={r.value}>
+                    {r.label}
+                  </option>
                 ))}
               </select>
             </div>

@@ -81,14 +81,20 @@ describe('EmployeesPage — list states', () => {
   });
 
   it('renders error state', () => {
-    mockListEmployees.mockReturnValue({ isLoading: false, isError: true, data: undefined, refetch: vi.fn() });
+    mockListEmployees.mockReturnValue({
+      isLoading: false,
+      isError: true,
+      data: undefined,
+      refetch: vi.fn(),
+    });
     renderPage();
     expect(screen.getByText(/failed to load employees/i)).toBeInTheDocument();
   });
 
   it('renders empty state when no employees exist', () => {
     mockListEmployees.mockReturnValue({
-      isLoading: false, isError: false,
+      isLoading: false,
+      isError: false,
       data: { employees: [], meta: { ...MOCK_META, total: 0 } },
     });
     renderPage();
@@ -97,7 +103,8 @@ describe('EmployeesPage — list states', () => {
 
   it('renders employee data in table', () => {
     mockListEmployees.mockReturnValue({
-      isLoading: false, isError: false,
+      isLoading: false,
+      isError: false,
       data: { employees: [MOCK_EMPLOYEE], meta: MOCK_META },
     });
     renderPage();
@@ -110,7 +117,8 @@ describe('EmployeesPage — list states', () => {
 
   it('shows Add Employee button for ADMIN', () => {
     mockListEmployees.mockReturnValue({
-      isLoading: false, isError: false,
+      isLoading: false,
+      isError: false,
       data: { employees: [], meta: MOCK_META },
     });
     renderPage();
@@ -119,7 +127,8 @@ describe('EmployeesPage — list states', () => {
 
   it('hides Add Employee button for VIEWER', () => {
     mockListEmployees.mockReturnValue({
-      isLoading: false, isError: false,
+      isLoading: false,
+      isError: false,
       data: { employees: [], meta: MOCK_META },
     });
     renderPage({
@@ -130,7 +139,8 @@ describe('EmployeesPage — list states', () => {
 
   it('shows empty state hint to adjust filters when search is active', () => {
     mockListEmployees.mockReturnValue({
-      isLoading: false, isError: false,
+      isLoading: false,
+      isError: false,
       data: { employees: [], meta: MOCK_META },
     });
     renderPage();
@@ -143,7 +153,8 @@ describe('EmployeesPage — search debounce', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     mockListEmployees.mockReturnValue({
-      isLoading: false, isError: false,
+      isLoading: false,
+      isError: false,
       data: { employees: [], meta: MOCK_META },
     });
   });
@@ -157,13 +168,17 @@ describe('EmployeesPage — search debounce', () => {
     renderPage();
     const input = screen.getByPlaceholderText(/search by name/i);
 
-    act(() => { fireEvent.change(input, { target: { value: 'Ali' } }); });
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Ali' } });
+    });
 
     // Before debounce window expires the hook should not yet see the new value
     const callsMid = mockListEmployees.mock.calls.map((c) => c[0]?.search ?? '');
     expect(callsMid.every((s) => s !== 'Ali')).toBe(true);
 
-    act(() => { vi.advanceTimersByTime(350); });
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
 
     const lastCall = mockListEmployees.mock.calls.at(-1)?.[0];
     expect(lastCall?.search ?? '').toBe('Ali');
@@ -173,8 +188,12 @@ describe('EmployeesPage — search debounce', () => {
     renderPage();
     const input = screen.getByPlaceholderText(/search by name/i);
 
-    act(() => { fireEvent.change(input, { target: { value: 'Bob' } }); });
-    act(() => { vi.advanceTimersByTime(350); });
+    act(() => {
+      fireEvent.change(input, { target: { value: 'Bob' } });
+    });
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
 
     const lastCall = mockListEmployees.mock.calls.at(-1)?.[0];
     expect(lastCall?.page).toBe(1);

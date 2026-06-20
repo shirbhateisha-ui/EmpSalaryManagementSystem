@@ -10,7 +10,11 @@ import { useGetEmployeeQuery } from '../api/employees.api';
 import { SalaryHistory } from '../components/SalaryHistory';
 import { EditEmployeeModal } from '../components/EditEmployeeModal';
 
-const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const USD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
@@ -69,11 +73,14 @@ export default function EmployeeDetailPage() {
             <CardTitle className="text-base">Profile</CardTitle>
           </CardHeader>
           <CardContent>
-            <DetailRow label="Department"    value={employee.department} />
-            <DetailRow label="Country"       value={employee.country} />
-            <DetailRow label="Joining Date"  value={employee.joining_date} />
-            <DetailRow label="Currency"      value={employee.currency_code} />
-            <DetailRow label="Status"        value={employee.status === 'active' ? 'Active' : 'Inactive'} />
+            <DetailRow label="Department" value={employee.department} />
+            <DetailRow label="Country" value={employee.country} />
+            <DetailRow label="Joining Date" value={employee.joining_date} />
+            <DetailRow label="Currency" value={employee.currency_code} />
+            <DetailRow
+              label="Status"
+              value={employee.status === 'active' ? 'Active' : 'Inactive'}
+            />
           </CardContent>
         </Card>
 
@@ -111,9 +118,7 @@ export default function EmployeeDetailPage() {
 
       <SalaryHistory employee={employee} />
 
-      {showEdit && (
-        <EditEmployeeModal employee={employee} onClose={() => setShowEdit(false)} />
-      )}
+      {showEdit && <EditEmployeeModal employee={employee} onClose={() => setShowEdit(false)} />}
     </div>
   );
 }

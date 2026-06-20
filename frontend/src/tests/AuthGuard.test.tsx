@@ -16,8 +16,7 @@ function makeStore(authState: Partial<AuthState>) {
       [baseApi.reducerPath]: baseApi.reducer,
     },
     preloadedState: { auth },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(baseApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
   });
 }
 

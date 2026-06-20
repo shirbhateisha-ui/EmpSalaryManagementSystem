@@ -8,10 +8,10 @@ export const analyticsRoutes = Router();
 
 analyticsRoutes.use(authenticate);
 
-analyticsRoutes.get('/summary',       analyticsController.summary);
-analyticsRoutes.get('/by-country',    analyticsController.byCountry);
+analyticsRoutes.get('/summary', analyticsController.summary);
+analyticsRoutes.get('/by-country', analyticsController.byCountry);
 analyticsRoutes.get('/by-department', analyticsController.byDepartment);
-analyticsRoutes.get('/distribution',  analyticsController.distribution);
+analyticsRoutes.get('/distribution', analyticsController.distribution);
 analyticsRoutes.get(
   '/top-earners',
   validate(topEarnersQuerySchema, 'query'),

@@ -60,7 +60,11 @@ describe('Salary Repository', () => {
   it('normalizes base_salary to USD via rate_to_usd', () => {
     seedTestCurrency('INR', 0.012);
     const emp = seedTestEmployee({ currency_code: 'INR' });
-    seedTestSalary(emp.id, { base_salary: 5_000_000, currency_code: 'INR', effective_date: '2024-01-01' });
+    seedTestSalary(emp.id, {
+      base_salary: 5_000_000,
+      currency_code: 'INR',
+      effective_date: '2024-01-01',
+    });
 
     const [record] = salaryRepository.listByEmployee(emp.id);
     expect(record.base_salary).toBe(5_000_000);
@@ -153,8 +157,18 @@ describe('Salary Service', () => {
 
   it('multiple raises accumulate without overwriting', () => {
     const emp = seedTestEmployee();
-    salaryService.addSalary(emp.id, { base_salary: 50000, currency_code: 'USD', country: 'US', effective_date: '2023-01-01' });
-    salaryService.addSalary(emp.id, { base_salary: 70000, currency_code: 'USD', country: 'US', effective_date: '2024-01-01' });
+    salaryService.addSalary(emp.id, {
+      base_salary: 50000,
+      currency_code: 'USD',
+      country: 'US',
+      effective_date: '2023-01-01',
+    });
+    salaryService.addSalary(emp.id, {
+      base_salary: 70000,
+      currency_code: 'USD',
+      country: 'US',
+      effective_date: '2024-01-01',
+    });
 
     const history = salaryService.listByEmployee(emp.id);
     expect(history).toHaveLength(2);
@@ -179,10 +193,7 @@ describe('Salary API endpoints', () => {
   });
 
   async function loginAs(email: string, password: string): Promise<string> {
-    const res = await request(app)
-      .post('/api/v1/auth/login')
-      .send({ email, password })
-      .expect(200);
+    const res = await request(app).post('/api/v1/auth/login').send({ email, password }).expect(200);
     return res.body.data.accessToken as string;
   }
 
@@ -247,7 +258,12 @@ describe('Salary API endpoints', () => {
     const res = await request(app)
       .post(`/api/v1/employees/${emp.id}/salaries`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ base_salary: 60000, currency_code: 'USD', country: 'US', effective_date: '2024-01-01' })
+      .send({
+        base_salary: 60000,
+        currency_code: 'USD',
+        country: 'US',
+        effective_date: '2024-01-01',
+      })
       .expect(403);
 
     expect(res.body.error.code).toBe('FORBIDDEN');
@@ -260,7 +276,12 @@ describe('Salary API endpoints', () => {
     const res = await request(app)
       .post(`/api/v1/employees/${emp.id}/salaries`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ base_salary: 75000, currency_code: 'USD', country: 'US', effective_date: '2024-03-01' })
+      .send({
+        base_salary: 75000,
+        currency_code: 'USD',
+        country: 'US',
+        effective_date: '2024-03-01',
+      })
       .expect(201);
 
     expect(res.body.success).toBe(true);
@@ -275,7 +296,12 @@ describe('Salary API endpoints', () => {
     const res = await request(app)
       .post('/api/v1/employees/9999/salaries')
       .set('Authorization', `Bearer ${token}`)
-      .send({ base_salary: 60000, currency_code: 'USD', country: 'US', effective_date: '2024-01-01' })
+      .send({
+        base_salary: 60000,
+        currency_code: 'USD',
+        country: 'US',
+        effective_date: '2024-01-01',
+      })
       .expect(404);
 
     expect(res.body.error.code).toBe('NOT_FOUND');
@@ -301,7 +327,12 @@ describe('Salary API endpoints', () => {
     await request(app)
       .post(`/api/v1/employees/${emp.id}/salaries`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ base_salary: 90000, currency_code: 'USD', country: 'US', effective_date: '2024-06-01' })
+      .send({
+        base_salary: 90000,
+        currency_code: 'USD',
+        country: 'US',
+        effective_date: '2024-06-01',
+      })
       .expect(201);
 
     const res = await request(app)

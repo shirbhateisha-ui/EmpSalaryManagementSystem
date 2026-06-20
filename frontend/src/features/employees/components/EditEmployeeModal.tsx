@@ -28,28 +28,30 @@ function extractApiError(error: unknown): string {
 
 function validate(f: UpdateEmployeeRequest) {
   const e: Partial<Record<keyof UpdateEmployeeRequest, string>> = {};
-  if (!f.name?.trim())          e.name          = 'Name is required';
-  if (!f.email?.trim())         e.email         = 'Email is required';
+  if (!f.name?.trim()) e.name = 'Name is required';
+  if (!f.email?.trim()) e.email = 'Email is required';
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) e.email = 'Enter a valid email';
-  if (!f.country?.trim())       e.country       = 'Country is required';
-  if (!f.department?.trim())    e.department    = 'Department is required';
+  if (!f.country?.trim()) e.country = 'Country is required';
+  if (!f.department?.trim()) e.department = 'Department is required';
   if (!f.currency_code?.trim()) e.currency_code = 'Currency code is required';
-  if (!f.joining_date)          e.joining_date  = 'Joining date is required';
+  if (!f.joining_date) e.joining_date = 'Joining date is required';
   else if (!/^\d{4}-\d{2}-\d{2}$/.test(f.joining_date)) e.joining_date = 'Use YYYY-MM-DD format';
   return e;
 }
 
 export function EditEmployeeModal({ employee, onClose }: Props) {
   const [form, setForm] = useState<UpdateEmployeeRequest>({
-    name:          employee.name,
-    email:         employee.email,
-    country:       employee.country,
-    department:    employee.department,
+    name: employee.name,
+    email: employee.email,
+    country: employee.country,
+    department: employee.department,
     currency_code: employee.currency_code,
-    joining_date:  employee.joining_date,
-    status:        employee.status,
+    joining_date: employee.joining_date,
+    status: employee.status,
   });
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof UpdateEmployeeRequest, string>>>({});
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<keyof UpdateEmployeeRequest, string>>
+  >({});
   const [updateEmployee, { isLoading, error }] = useUpdateEmployeeMutation();
 
   function set(key: keyof UpdateEmployeeRequest, value: string) {
@@ -71,15 +73,29 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
     try {
       await updateEmployee({ id: employee.id, body: form }).unwrap();
       onClose();
-    } catch { /* shown via error state */ }
+    } catch {
+      /* shown via error state */
+    }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="ee-title">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ee-title"
+    >
       <Card className="w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle id="ee-title" className="text-lg">Edit Employee</CardTitle>
-          <button type="button" onClick={onClose} className="rounded p-1 text-muted-foreground hover:bg-accent" aria-label="Close">
+          <CardTitle id="ee-title" className="text-lg">
+            Edit Employee
+          </CardTitle>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 text-muted-foreground hover:bg-accent"
+            aria-label="Close"
+          >
             <X className="h-4 w-4" />
           </button>
         </CardHeader>
@@ -87,12 +103,14 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             {(
               [
-                { key: 'name',  label: 'Name',  type: 'text' },
+                { key: 'name', label: 'Name', type: 'text' },
                 { key: 'email', label: 'Email', type: 'email' },
               ] as const
             ).map(({ key, label, type }) => (
               <div key={key} className="space-y-1.5">
-                <label htmlFor={`ee-${key}`} className="text-sm font-medium">{label}</label>
+                <label htmlFor={`ee-${key}`} className="text-sm font-medium">
+                  {label}
+                </label>
                 <Input
                   id={`ee-${key}`}
                   type={type}
@@ -106,7 +124,9 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
             ))}
 
             <div className="space-y-1.5">
-              <label htmlFor="ee-country" className="text-sm font-medium">Country</label>
+              <label htmlFor="ee-country" className="text-sm font-medium">
+                Country
+              </label>
               <select
                 id="ee-country"
                 value={form.country ?? ''}
@@ -117,14 +137,20 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
               >
                 <option value="">-- Select Country --</option>
                 {COUNTRIES.map((c) => (
-                  <option key={c.code} value={c.name}>{c.name}</option>
+                  <option key={c.code} value={c.name}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
-              {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
+              {fieldErrors.country && (
+                <p className="text-xs text-destructive">{fieldErrors.country}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="ee-department" className="text-sm font-medium">Department</label>
+              <label htmlFor="ee-department" className="text-sm font-medium">
+                Department
+              </label>
               <select
                 id="ee-department"
                 value={form.department ?? ''}
@@ -135,14 +161,20 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
               >
                 <option value="">-- Select Department --</option>
                 {DEPARTMENTS.map((d) => (
-                  <option key={d} value={d}>{d}</option>
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
                 ))}
               </select>
-              {fieldErrors.department && <p className="text-xs text-destructive">{fieldErrors.department}</p>}
+              {fieldErrors.department && (
+                <p className="text-xs text-destructive">{fieldErrors.department}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="ee-currency_code" className="text-sm font-medium">Currency Code</label>
+              <label htmlFor="ee-currency_code" className="text-sm font-medium">
+                Currency Code
+              </label>
               <select
                 id="ee-currency_code"
                 value={form.currency_code ?? ''}
@@ -153,10 +185,14 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
               >
                 <option value="">-- Select Currency --</option>
                 {CURRENCIES.map((c) => (
-                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                  <option key={c.code} value={c.code}>
+                    {c.code} — {c.name}
+                  </option>
                 ))}
               </select>
-              {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
+              {fieldErrors.currency_code && (
+                <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -168,11 +204,15 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
                 placeholder="Pick a date"
                 aria-invalid={!!fieldErrors.joining_date}
               />
-              {fieldErrors.joining_date && <p className="text-xs text-destructive">{fieldErrors.joining_date}</p>}
+              {fieldErrors.joining_date && (
+                <p className="text-xs text-destructive">{fieldErrors.joining_date}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="ee-status" className="text-sm font-medium">Status</label>
+              <label htmlFor="ee-status" className="text-sm font-medium">
+                Status
+              </label>
               <select
                 id="ee-status"
                 value={form.status}
@@ -192,8 +232,12 @@ export function EditEmployeeModal({ employee, onClose }: Props) {
             )}
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>Cancel</Button>
-              <Button type="submit" disabled={isLoading}>{isLoading ? 'Saving…' : 'Save Changes'}</Button>
+              <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Saving…' : 'Save Changes'}
+              </Button>
             </div>
           </form>
         </CardContent>

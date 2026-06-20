@@ -4,8 +4,8 @@ import type { PaginationMeta } from '../../shared/utils/response.utils.js';
 import type { Employee, CreateEmployeeInput, UpdateEmployeeInput } from './employee.types.js';
 import { employeeRepository } from './employee.repository.js';
 
-export interface CreateEmployeeDto extends CreateEmployeeInput {}
-export interface UpdateEmployeeDto extends UpdateEmployeeInput {}
+export type CreateEmployeeDto = CreateEmployeeInput;
+export type UpdateEmployeeDto = UpdateEmployeeInput;
 
 export const employeeService = {
   list(query: Record<string, unknown>): { employees: Employee[]; meta: PaginationMeta } {
@@ -19,7 +19,14 @@ export const employeeService = {
       department: query.department as string | undefined,
       country: query.country as string | undefined,
       status: query.status as 'active' | 'inactive' | undefined,
-      sort: query.sort as 'name' | 'department' | 'country' | 'joining_date' | 'base_salary_usd' | 'created_at' | undefined,
+      sort: query.sort as
+        | 'name'
+        | 'department'
+        | 'country'
+        | 'joining_date'
+        | 'base_salary_usd'
+        | 'created_at'
+        | undefined,
       order: query.order as 'asc' | 'desc' | undefined,
     });
 

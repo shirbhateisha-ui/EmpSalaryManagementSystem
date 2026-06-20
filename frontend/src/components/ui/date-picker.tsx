@@ -1,12 +1,22 @@
 import { useState } from 'react';
-import { format, parse, isValid, setYear, setMonth, addMonths, subMonths, getYear, getMonth } from 'date-fns';
+import {
+  format,
+  parse,
+  isValid,
+  setYear,
+  setMonth,
+  addMonths,
+  subMonths,
+  getYear,
+  getMonth,
+} from 'date-fns';
 import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
 import { cn } from '@/lib/utils';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 type View = 'years' | 'months' | 'days';
 
@@ -25,23 +35,23 @@ export function DatePicker({
   placeholder = 'Pick a date',
   'aria-invalid': ariaInvalid,
 }: DatePickerProps) {
-  const [open, setOpen]           = useState(false);
-  const [view, setView]           = useState<View>('days');
+  const [open, setOpen] = useState(false);
+  const [view, setView] = useState<View>('days');
   const [inputValue, setInputValue] = useState(value);
   const [inputError, setInputError] = useState(false);
 
-  const parsed   = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
+  const parsed = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
   const selected = parsed && isValid(parsed) ? parsed : undefined;
 
   const today = new Date();
   const [displayMonth, setDisplayMonth] = useState<Date>(selected ?? today);
-  const [yearBase, setYearBase]         = useState<number>(
+  const [yearBase, setYearBase] = useState<number>(
     Math.floor(getYear(selected ?? today) / 12) * 12,
   );
 
-  const displayYear       = getYear(displayMonth);
+  const displayYear = getYear(displayMonth);
   const displayMonthIndex = getMonth(displayMonth);
-  const yearsOnPage       = Array.from({ length: 12 }, (_, i) => yearBase + i);
+  const yearsOnPage = Array.from({ length: 12 }, (_, i) => yearBase + i);
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
@@ -125,7 +135,6 @@ export function DatePicker({
       </PopoverTrigger>
 
       <PopoverContent className="w-[280px] p-0" align="start">
-
         {/* ── Year grid ── */}
         {view === 'years' && (
           <div className="p-3">
@@ -133,7 +142,9 @@ export function DatePicker({
               <button type="button" className={navBtn} onClick={() => setYearBase((b) => b - 12)}>
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <span className="text-sm font-semibold">{yearBase} – {yearBase + 11}</span>
+              <span className="text-sm font-semibold">
+                {yearBase} – {yearBase + 11}
+              </span>
               <button type="button" className={navBtn} onClick={() => setYearBase((b) => b + 12)}>
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -229,19 +240,20 @@ export function DatePicker({
               showOutsideDays
               components={{ Caption: () => null }}
               classNames={{
-                months:       'flex flex-col',
-                month:        '',
-                table:        'w-full border-collapse',
-                head_row:     'flex px-3',
-                head_cell:    'text-muted-foreground w-8 text-center font-normal text-[0.75rem]',
-                row:          'flex w-full px-3 mt-1',
-                cell:         'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:rounded-md [&:has([aria-selected])]:bg-accent',
-                day:          'h-8 w-8 inline-flex items-center justify-center rounded-md p-0 text-sm font-normal hover:bg-accent hover:text-accent-foreground transition-colors aria-selected:opacity-100',
-                day_selected: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
-                day_today:    'bg-accent text-accent-foreground font-semibold',
-                day_outside:  'text-muted-foreground opacity-40',
+                months: 'flex flex-col',
+                month: '',
+                table: 'w-full border-collapse',
+                head_row: 'flex px-3',
+                head_cell: 'text-muted-foreground w-8 text-center font-normal text-[0.75rem]',
+                row: 'flex w-full px-3 mt-1',
+                cell: 'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:rounded-md [&:has([aria-selected])]:bg-accent',
+                day: 'h-8 w-8 inline-flex items-center justify-center rounded-md p-0 text-sm font-normal hover:bg-accent hover:text-accent-foreground transition-colors aria-selected:opacity-100',
+                day_selected:
+                  'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+                day_today: 'bg-accent text-accent-foreground font-semibold',
+                day_outside: 'text-muted-foreground opacity-40',
                 day_disabled: 'text-muted-foreground opacity-30',
-                day_hidden:   'invisible',
+                day_hidden: 'invisible',
               }}
             />
           </div>
@@ -259,9 +271,7 @@ export function DatePicker({
               className={cn(
                 'h-7 w-full rounded-md border bg-background px-2 py-1 text-sm shadow-sm',
                 'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
-                inputError
-                  ? 'border-destructive focus-visible:ring-destructive'
-                  : 'border-input',
+                inputError ? 'border-destructive focus-visible:ring-destructive' : 'border-input',
               )}
             />
             {inputError && (
@@ -278,7 +288,6 @@ export function DatePicker({
             Clear
           </button>
         </div>
-
       </PopoverContent>
     </Popover>
   );

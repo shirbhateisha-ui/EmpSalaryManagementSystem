@@ -31,7 +31,8 @@ export default function DashboardPage() {
         <CardHeader>
           <CardTitle>API health check</CardTitle>
           <CardDescription>
-            Live request to <code className="rounded bg-muted px-1 py-0.5">{getApiOrigin()}/health</code>
+            Live request to{' '}
+            <code className="rounded bg-muted px-1 py-0.5">{getApiOrigin()}/health</code>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

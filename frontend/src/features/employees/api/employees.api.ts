@@ -16,13 +16,13 @@ export interface EmployeesListResult {
 
 function buildQuery(filters: EmployeeFilters): string {
   const params = new URLSearchParams();
-  if (filters.search)     params.set('search', filters.search);
-  if (filters.country)    params.set('country', filters.country);
+  if (filters.search) params.set('search', filters.search);
+  if (filters.country) params.set('country', filters.country);
   if (filters.department) params.set('department', filters.department);
-  if (filters.status)     params.set('status', filters.status);
-  if (filters.sort)       params.set('sort', filters.sort);
-  if (filters.order)      params.set('order', filters.order);
-  params.set('page',  String(filters.page  ?? 1));
+  if (filters.status) params.set('status', filters.status);
+  if (filters.sort) params.set('sort', filters.sort);
+  if (filters.order) params.set('order', filters.order);
+  params.set('page', String(filters.page ?? 1));
   params.set('limit', String(filters.limit ?? 20));
   return `/employees?${params.toString()}`;
 }

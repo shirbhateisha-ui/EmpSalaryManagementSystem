@@ -3,11 +3,7 @@ import { verifyAccessToken } from '../shared/utils/jwt.utils.js';
 import { UnauthorizedError } from '../shared/errors/AppError.js';
 import { userRepository } from '../modules/users/user.repository.js';
 
-export function authenticate(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): void {
+export function authenticate(req: Request, _res: Response, next: NextFunction): void {
   try {
     const header = req.headers.authorization;
     if (!header?.startsWith('Bearer ')) {

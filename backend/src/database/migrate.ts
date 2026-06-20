@@ -3,10 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { closeDb, getDb } from './connection.js';
 
-const migrationsDir = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  'migrations',
-);
+const migrationsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'migrations');
 
 function ensureMigrationsTable(): void {
   const db = getDb();

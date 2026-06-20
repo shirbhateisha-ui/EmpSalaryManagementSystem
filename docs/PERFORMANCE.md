@@ -17,10 +17,10 @@ PRAGMA journal_mode = WAL;
 PRAGMA foreign_keys = ON;
 ```
 
-| PRAGMA | Effect |
-|--------|--------|
+| PRAGMA               | Effect                                                                                                                                                                                                               |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `journal_mode = WAL` | Write-Ahead Logging. Readers do not block writers and writers do not block readers. Multiple concurrent read queries (e.g. analytics + employee list) run in parallel. Without WAL, any write locks the entire file. |
-| `foreign_keys = ON`  | SQLite disables FK checks by default. Enabling it prevents orphaned `salaries` rows (employee deleted without cascade) at zero application-code cost. |
+| `foreign_keys = ON`  | SQLite disables FK checks by default. Enabling it prevents orphaned `salaries` rows (employee deleted without cascade) at zero application-code cost.                                                                |
 
 ### `v_current_salary` view — query the join once
 
@@ -88,6 +88,7 @@ LIMIT ? OFFSET ?
 ```
 
 This means:
+
 - The response payload is bounded to one page (default 20 rows).
 - `LIKE 'term%'` (prefix match) can use the `employees(name)` index.
 - Sorting by salary uses the `v_current_salary` join; the index on
@@ -190,15 +191,15 @@ statically. This avoids:
 
 ## Expected Query Times (10,000 employees)
 
-| Operation | Mechanism | Expected p95 |
-|-----------|-----------|-------------|
-| Employee list (page 1, no filters) | Index scan on `name ASC` | < 5 ms |
-| Employee list (filtered + sorted) | Composite index | < 10 ms |
-| Analytics summary | Single aggregate query over view | < 15 ms |
-| Analytics by-country / by-dept | GROUP BY over view | < 15 ms |
-| Salary distribution | CASE WHEN + GROUP BY | < 10 ms |
-| Top earners | ORDER BY base_salary_usd DESC LIMIT 10 | < 5 ms |
-| Employee detail with current salary | PK lookup + view join | < 2 ms |
+| Operation                           | Mechanism                              | Expected p95 |
+| ----------------------------------- | -------------------------------------- | ------------ |
+| Employee list (page 1, no filters)  | Index scan on `name ASC`               | < 5 ms       |
+| Employee list (filtered + sorted)   | Composite index                        | < 10 ms      |
+| Analytics summary                   | Single aggregate query over view       | < 15 ms      |
+| Analytics by-country / by-dept      | GROUP BY over view                     | < 15 ms      |
+| Salary distribution                 | CASE WHEN + GROUP BY                   | < 10 ms      |
+| Top earners                         | ORDER BY base_salary_usd DESC LIMIT 10 | < 5 ms       |
+| Employee detail with current salary | PK lookup + view join                  | < 2 ms       |
 
 All measurements assume WAL mode enabled, indexes in place, and the SQLite page
 cache warmed after first query.
@@ -207,9 +208,9 @@ cache warmed after first query.
 
 ## Bottlenecks to Watch at Higher Scale
 
-| Risk | Threshold | Mitigation |
-|------|-----------|------------|
-| Sort-by-salary on employee list | ~100k rows | Denormalise `current_salary_usd` onto `employees` with an index; update it on every raise |
-| Analytics aggregation over view | ~500k rows | Materialise summary with a scheduled background job; cache in a `analytics_snapshot` table |
-| SQLite single writer | High concurrent writes | Move to PostgreSQL (connection pool) or Turso (libSQL, distributed) |
-| Full-table scan on `LIKE '%term%'` | ~50k rows | Upgrade to SQLite FTS5 (`CREATE VIRTUAL TABLE employees_fts USING fts5`) for prefix and infix search |
+| Risk                               | Threshold              | Mitigation                                                                                           |
+| ---------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------- |
+| Sort-by-salary on employee list    | ~100k rows             | Denormalise `current_salary_usd` onto `employees` with an index; update it on every raise            |
+| Analytics aggregation over view    | ~500k rows             | Materialise summary with a scheduled background job; cache in a `analytics_snapshot` table           |
+| SQLite single writer               | High concurrent writes | Move to PostgreSQL (connection pool) or Turso (libSQL, distributed)                                  |
+| Full-table scan on `LIKE '%term%'` | ~50k rows              | Upgrade to SQLite FTS5 (`CREATE VIRTUAL TABLE employees_fts USING fts5`) for prefix and infix search |

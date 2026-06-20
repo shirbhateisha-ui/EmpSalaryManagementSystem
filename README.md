@@ -60,12 +60,69 @@ Copy-Item frontend/.env.example frontend/.env
 
 Default env values work out of the box for local development:
 
-| File            | Variable       | Default                        | Purpose                            |
-| --------------- | -------------- | ------------------------------ | ---------------------------------- |
-| `backend/.env`  | `PORT`         | `4000`                         | Backend HTTP port                  |
-| `backend/.env`  | `CORS_ORIGIN`  | `http://localhost:5173`        | Allowed frontend origin            |
-| `backend/.env`  | `DB_PATH`      | `./data/app.db`                | SQLite file (used in later phases) |
-| `frontend/.env` | `VITE_API_URL` | `http://localhost:4000/api/v1` | Backend API base URL               |
+| File            | Variable       | Default                        | Purpose                   |
+| --------------- | -------------- | ------------------------------ | ------------------------- |
+| `backend/.env`  | `PORT`         | `4000`                         | Backend HTTP port         |
+| `backend/.env`  | `CORS_ORIGIN`  | `http://localhost:5173`        | Allowed frontend origin   |
+| `backend/.env`  | `DB_PATH`      | `./data/app.db`                | SQLite database file path |
+| `frontend/.env` | `VITE_API_URL` | `http://localhost:4000/api/v1` | Backend API base URL      |
+
+## Database setup
+
+The app uses **SQLite** via `better-sqlite3` — there is **no database server to install
+or run**. The database is a single file at `backend/data/app.db` (configurable via
+`DB_PATH`). WAL mode and foreign-key enforcement are enabled automatically on every
+connection.
+
+### First-time setup
+
+After installing dependencies and creating `backend/.env`, build and populate the
+database with one command from the repository root:
+
+```bash
+npm run db:seed -w backend
+```
+
+This **runs the migrations first**, then seeds the data — so it's all you need to go
+from nothing to a ready database. It creates:
+
+- All tables (`currencies`, `employees`, `salaries`, `users`, `refresh_tokens`) and the
+  `v_current_salary` view
+- 7 seeded currencies with USD exchange rates
+- The admin user (credentials from `backend/.env` — defaults `admin@acme.com` / `i`)
+- 10,000 fake employees with salary history
+
+The `backend/data/` directory is created automatically. Seeding is **idempotent** — it
+skips employee seeding if the database is already populated.
+
+### Database scripts
+
+Run from the repository root:
+
+| Script                          | Purpose                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `npm run db:migrate -w backend` | Apply pending SQL migrations only (schema + view). Tracked in a `_migrations` table, so it's safe to re-run. |
+| `npm run db:seed -w backend`    | Run migrations, then seed currencies, the admin user, and 10,000 employees. Idempotent.                      |
+| `npm run db:reset -w backend`   | Clear seed data and re-seed from scratch.                                                                    |
+
+### Start over from a clean slate
+
+Delete the database file and its WAL/SHM sidecars, then re-seed:
+
+```bash
+# macOS / Linux / Git Bash
+rm -f backend/data/app.db backend/data/app.db-wal backend/data/app.db-shm
+npm run db:seed -w backend
+```
+
+```powershell
+# Windows PowerShell
+Remove-Item backend\data\app.db, backend\data\app.db-wal, backend\data\app.db-shm -ErrorAction SilentlyContinue
+npm run db:seed -w backend
+```
+
+> Only delete these files while the backend and any SQLite viewer are **stopped** —
+> removing them while a connection is open can corrupt state.
 
 ## Run locally
 
@@ -106,15 +163,18 @@ up. Feature screens (employees, analytics) arrive in later phases — see
 Run from the root to target all workspaces, or add `-w backend` / `-w frontend` to
 target one.
 
-| Script                 | Purpose                               |
-| ---------------------- | ------------------------------------- |
-| `npm run dev`          | Start **both** dev servers (parallel) |
-| `npm run build`        | Production build                      |
-| `npm run lint`         | Lint with ESLint                      |
-| `npm run typecheck`    | Type-check with `tsc`                 |
-| `npm run format`       | Format the repo with Prettier         |
-| `npm run format:check` | Check formatting without writing      |
-| `npm test`             | Run tests (Vitest)                    |
+| Script                          | Purpose                               |
+| ------------------------------- | ------------------------------------- |
+| `npm run dev`                   | Start **both** dev servers (parallel) |
+| `npm run build`                 | Production build                      |
+| `npm run lint`                  | Lint with ESLint                      |
+| `npm run typecheck`             | Type-check with `tsc`                 |
+| `npm run format`                | Format the repo with Prettier         |
+| `npm run format:check`          | Check formatting without writing      |
+| `npm test`                      | Run tests (Vitest)                    |
+| `npm run db:migrate -w backend` | Apply pending DB migrations           |
+| `npm run db:seed -w backend`    | Migrate + seed the database           |
+| `npm run db:reset -w backend`   | Reset and re-seed the database        |
 
 Example — type-check just the frontend: `npm run typecheck -w frontend`.
 

@@ -19,9 +19,7 @@ export default function UsersPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">User Management</h1>
-          <p className="text-sm text-muted-foreground">
-            Manage system users and their roles.
-          </p>
+          <p className="text-sm text-muted-foreground">Manage system users and their roles.</p>
         </div>
         <Button onClick={() => setShowCreateModal(true)} className="gap-2">
           <UserPlus className="h-4 w-4" />
@@ -38,22 +36,18 @@ export default function UsersPage() {
         />
       )}
 
-      {!isLoading && !isError && data && (
-        data.users.length === 0 ? (
-          <EmptyState
-            title="No users found"
-            description="Add the first user to get started."
-          />
+      {!isLoading &&
+        !isError &&
+        data &&
+        (data.users.length === 0 ? (
+          <EmptyState title="No users found" description="Add the first user to get started." />
         ) : (
           <div className="rounded-md border">
             <UserTable users={data.users} currentUserId={currentUser?.id} />
           </div>
-        )
-      )}
+        ))}
 
-      {showCreateModal && (
-        <CreateUserModal onClose={() => setShowCreateModal(false)} />
-      )}
+      {showCreateModal && <CreateUserModal onClose={() => setShowCreateModal(false)} />}
     </div>
   );
 }

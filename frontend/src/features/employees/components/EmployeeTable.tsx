@@ -2,11 +2,20 @@ import { Link } from 'react-router-dom';
 import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 import type { Employee, EmployeeSortField, EmployeeStatus } from '../types/employee.types';
 
-const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const USD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
 
 function StatusBadge({ status }: { status: EmployeeStatus }) {
   return (
@@ -41,7 +50,11 @@ function SortHeader({ label, field, currentSort, currentOrder, onSort }: SortHea
     >
       {label}
       {isActive ? (
-        currentOrder === 'asc' ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+        currentOrder === 'asc' ? (
+          <ArrowUp className="h-3 w-3" />
+        ) : (
+          <ArrowDown className="h-3 w-3" />
+        )
       ) : (
         <ArrowUpDown className="h-3 w-3 opacity-40" />
       )}
@@ -62,17 +75,41 @@ export function EmployeeTable({ employees, sort, order, onSort }: EmployeeTableP
       <TableHeader>
         <TableRow>
           <TableHead>
-            <SortHeader label="Name" field="name" currentSort={sort} currentOrder={order} onSort={onSort} />
+            <SortHeader
+              label="Name"
+              field="name"
+              currentSort={sort}
+              currentOrder={order}
+              onSort={onSort}
+            />
           </TableHead>
           <TableHead>Email</TableHead>
           <TableHead>
-            <SortHeader label="Country" field="country" currentSort={sort} currentOrder={order} onSort={onSort} />
+            <SortHeader
+              label="Country"
+              field="country"
+              currentSort={sort}
+              currentOrder={order}
+              onSort={onSort}
+            />
           </TableHead>
           <TableHead>
-            <SortHeader label="Department" field="department" currentSort={sort} currentOrder={order} onSort={onSort} />
+            <SortHeader
+              label="Department"
+              field="department"
+              currentSort={sort}
+              currentOrder={order}
+              onSort={onSort}
+            />
           </TableHead>
           <TableHead>
-            <SortHeader label="Salary (USD/yr)" field="base_salary_usd" currentSort={sort} currentOrder={order} onSort={onSort} />
+            <SortHeader
+              label="Salary (USD/yr)"
+              field="base_salary_usd"
+              currentSort={sort}
+              currentOrder={order}
+              onSort={onSort}
+            />
           </TableHead>
           <TableHead>Status</TableHead>
         </TableRow>
@@ -81,10 +118,7 @@ export function EmployeeTable({ employees, sort, order, onSort }: EmployeeTableP
         {employees.map((emp) => (
           <TableRow key={emp.id}>
             <TableCell className="font-medium">
-              <Link
-                to={`/employees/${emp.id}`}
-                className="hover:underline text-primary"
-              >
+              <Link to={`/employees/${emp.id}`} className="hover:underline text-primary">
                 {emp.name}
               </Link>
             </TableCell>
@@ -92,11 +126,15 @@ export function EmployeeTable({ employees, sort, order, onSort }: EmployeeTableP
             <TableCell>{emp.country}</TableCell>
             <TableCell>{emp.department}</TableCell>
             <TableCell>
-              {emp.current_salary
-                ? USD.format(emp.current_salary.base_salary_usd)
-                : <span className="text-muted-foreground">—</span>}
+              {emp.current_salary ? (
+                USD.format(emp.current_salary.base_salary_usd)
+              ) : (
+                <span className="text-muted-foreground">—</span>
+              )}
             </TableCell>
-            <TableCell><StatusBadge status={emp.status} /></TableCell>
+            <TableCell>
+              <StatusBadge status={emp.status} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

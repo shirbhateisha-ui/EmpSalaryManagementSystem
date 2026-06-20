@@ -14,7 +14,8 @@ function formatRole(role: Role): string {
 
 function roleBadgeClass(role: Role): string {
   if (role === 'ADMIN') return 'bg-primary/10 text-primary';
-  if (role === 'HR_MANAGER') return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300';
+  if (role === 'HR_MANAGER')
+    return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300';
   return 'bg-muted text-muted-foreground';
 }
 
@@ -58,7 +59,10 @@ export function UserMenu() {
       >
         <span className="font-medium">{firstName}</span>
         <ChevronDown
-          className={cn('h-3.5 w-3.5 text-muted-foreground transition-transform', open && 'rotate-180')}
+          className={cn(
+            'h-3.5 w-3.5 text-muted-foreground transition-transform',
+            open && 'rotate-180',
+          )}
         />
       </Button>
 

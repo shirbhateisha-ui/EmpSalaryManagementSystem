@@ -66,7 +66,7 @@ token is valid.
 
 ### Why append-only?
 
-A salary raise is a business *event*, not a mutation. The `salaries` table records
+A salary raise is a business _event_, not a mutation. The `salaries` table records
 every change with an `effective_date`. The most recent row is the "current salary".
 This gives:
 
@@ -142,6 +142,7 @@ Phase 9  Frontend analytics (KPI cards, CSS bar charts, insights panel)
 Every API response uses one of two shapes. No exceptions.
 
 **Success:**
+
 ```json
 {
   "success": true,
@@ -151,6 +152,7 @@ Every API response uses one of two shapes. No exceptions.
 ```
 
 **Error:**
+
 ```json
 {
   "success": false,
@@ -186,12 +188,12 @@ errors fall through to a 500 with a generic message (no stack traces in producti
 
 ## Frontend State Ownership
 
-| State type              | Owner                        | Reason                                              |
-|-------------------------|------------------------------|-----------------------------------------------------|
-| Auth (token + user)     | Redux slice (`authSlice`)    | Needed globally by the RTK Query baseQuery          |
-| Server data (employees, analytics, etc.) | RTK Query cache | Handles loading/error/stale automatically     |
-| Filter / search / pagination | Local `useState` in page component | Simple, co-located, no cross-feature sharing |
-| UI (open modal, etc.)   | Local `useState`             | Not needed outside the component                    |
+| State type                               | Owner                              | Reason                                       |
+| ---------------------------------------- | ---------------------------------- | -------------------------------------------- |
+| Auth (token + user)                      | Redux slice (`authSlice`)          | Needed globally by the RTK Query baseQuery   |
+| Server data (employees, analytics, etc.) | RTK Query cache                    | Handles loading/error/stale automatically    |
+| Filter / search / pagination             | Local `useState` in page component | Simple, co-located, no cross-feature sharing |
+| UI (open modal, etc.)                    | Local `useState`                   | Not needed outside the component             |
 
 Filters are intentionally kept in local state rather than a Redux slice. They
 reset naturally when the user navigates away, which matches the expected UX.
@@ -201,6 +203,7 @@ reset naturally when the user navigates away, which matches the expected UX.
 ## Test Strategy (as implemented)
 
 ### Backend
+
 - **Repository tests** — real `:memory:` SQLite, seeded fixtures, verify SQL
   correctness including the `v_current_salary` view and cross-currency aggregations.
 - **Service tests** — mocked repository; test business rules in isolation
@@ -210,6 +213,7 @@ reset naturally when the user navigates away, which matches the expected UX.
   envelope shape.
 
 ### Frontend
+
 - **Component tests** — Vitest + React Testing Library; `vi.mock()` on RTK Query
   hooks; test all four states (loading / error / empty / data) per page.
 - **Debounce tests** — `vi.useFakeTimers()` + `fireEvent.change()` (not

@@ -69,9 +69,7 @@ export function LoginForm() {
               aria-invalid={!!fieldErrors.email}
               disabled={isLoading}
             />
-            {fieldErrors.email && (
-              <p className="text-xs text-destructive">{fieldErrors.email}</p>
-            )}
+            {fieldErrors.email && <p className="text-xs text-destructive">{fieldErrors.email}</p>}
           </div>
 
           <div className="space-y-1.5">

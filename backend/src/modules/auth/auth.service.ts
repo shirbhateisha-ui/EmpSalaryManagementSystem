@@ -7,11 +7,7 @@ import {
   signRefreshToken,
   verifyRefreshToken,
 } from '../../shared/utils/jwt.utils.js';
-import {
-  generateOpaqueToken,
-  generateTokenId,
-  hashToken,
-} from '../../shared/utils/token.utils.js';
+import { generateOpaqueToken, generateTokenId, hashToken } from '../../shared/utils/token.utils.js';
 import type { AuthUser } from '../../shared/types/auth.types.js';
 import { userRepository } from '../users/user.repository.js';
 import { authRepository } from './auth.repository.js';

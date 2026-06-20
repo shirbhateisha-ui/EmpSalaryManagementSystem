@@ -12,6 +12,7 @@
 **Alternatives considered:** PostgreSQL via `pg` or `node-postgres`, Turso/libSQL
 
 **Why SQLite:**
+
 - Zero-ops: ships as a single file, no server process to run or configure.
 - `better-sqlite3` is synchronous — no callback or Promise overhead; queries return
   directly, which simplifies service and repository code.
@@ -23,6 +24,7 @@
   per query.
 
 **What we give up:**
+
 - No connection pooling or horizontal read replicas.
 - No `RETURNING` clause (SQLite added it in 3.35 — `better-sqlite3` supports it, but
   compatibility was avoided; repos re-fetch after insert instead).
@@ -44,6 +46,7 @@ in an `httpOnly` cookie with server-side rotation and revocation.
 single long-lived JWT stored in localStorage.
 
 **Why this approach:**
+
 - **No localStorage for credentials.** `httpOnly` cookies are invisible to
   JavaScript; XSS cannot steal the refresh token. The access token lives in Redux
   memory and is lost on page close.
@@ -56,6 +59,7 @@ single long-lived JWT stored in localStorage.
   wait for expiry.
 
 **What we give up:**
+
 - More moving parts than a simple session cookie.
 - Requires a `refresh_tokens` table and hash lookups on every refresh.
 - The access token cannot be invalidated before its 15-minute TTL — a deactivated
@@ -70,6 +74,7 @@ single long-lived JWT stored in localStorage.
 **Alternatives considered:** Drizzle ORM, Prisma, Knex query builder.
 
 **Why raw SQL:**
+
 - Demonstrates fundamentals clearly — every query is readable and auditable.
 - Full control over the `v_current_salary` view join, `CASE WHEN` distribution
   bucketing, and `COALESCE` guards for empty databases.
@@ -78,6 +83,7 @@ single long-lived JWT stored in localStorage.
   layer.
 
 **What we give up:**
+
 - More boilerplate per query (no schema-driven auto-completion).
 - Refactoring column names requires grep + manual update rather than a type-checked
   schema change.
@@ -94,6 +100,7 @@ via `v_current_salary` view.
 `employees` row (denormalised), updating in-place on raise.
 
 **Why append-only:**
+
 - Every raise is a business event with an `effective_date`. Overwriting loses that
   history permanently.
 - Full audit trail at no extra cost — HR can see what any employee earned at any
@@ -101,6 +108,7 @@ via `v_current_salary` view.
 - No UPDATE/DELETE routes are needed or exposed, reducing attack surface.
 
 **What we give up:**
+
 - Sorting employees by salary requires joining through the view, which adds a
   correlated subquery. At 10,000 rows this is fast; at 1M+ rows an indexed
   `current_salary_usd` column on `employees` would be the fallback.
@@ -116,6 +124,7 @@ library.
 **Alternatives considered:** Recharts, Chart.js, Nivo, Visx.
 
 **Why CSS charts:**
+
 - Zero bundle cost — no extra dependency, no tree-shaking concern.
 - Simple horizontal bars fit the use case perfectly. Each bar is:
   ```tsx
@@ -125,6 +134,7 @@ library.
 - Renders correctly in jsdom without needing canvas mocks.
 
 **What we give up:**
+
 - No animated transitions, interactive tooltips, or accessible `<title>` SVG labels
   that a real chart library provides out of the box.
 - Custom hover states require additional CSS; axis labels need manual layout.
@@ -140,6 +150,7 @@ library.
 **Alternatives considered:** TanStack Query (React Query), SWR.
 
 **Why RTK Query:**
+
 - The project already uses Redux Toolkit for the `authSlice` (access token, user,
   auth status). Adding RTK Query keeps everything in one store — no second state
   manager.
@@ -150,6 +161,7 @@ library.
   call signatures, keeping components consistent.
 
 **What we give up:**
+
 - RTK Query is heavier than React Query if Redux isn't already in the project.
 - More boilerplate: `reducerPath`, `middleware` wiring, `createApi` setup.
 - Slightly harder to tree-shake than a standalone React Query setup.
@@ -164,6 +176,7 @@ every component test.
 **Alternatives considered:** Mock Service Worker (MSW) at the network layer.
 
 **Why direct mocks:**
+
 - MSW requires a Service Worker setup in the browser and a separate handler file
   tree. This is non-trivial in a jsdom test environment.
 - Each page component consumes 1–5 RTK Query hooks. Mocking the hook directly is
@@ -172,6 +185,7 @@ every component test.
 - Isolation is cleaner: component tests don't accidentally test RTK Query internals.
 
 **What we give up:**
+
 - Tests don't exercise the RTK Query cache, normalisation, or serialisation layers.
 - Request/response shape mismatches between the real API and the mock won't be
   caught at the component layer (covered instead by backend integration tests).
@@ -186,6 +200,7 @@ every component test.
 **Alternatives considered:** `userEvent.setup({ advanceTimers: vi.advanceTimersByTime.bind(vi) })`
 
 **Why `fireEvent`:**
+
 - `userEvent.setup` with `advanceTimers` triggers async pointer-event simulation
   that interacts badly with jsdom's fake timer implementation, causing 5,000 ms
   timeouts.
@@ -195,6 +210,7 @@ every component test.
   hook after the delay — it does not need full keyboard simulation.
 
 **What we give up:**
+
 - `fireEvent` does not simulate the full browser event sequence (`focus`, `keydown`,
   `input`, `keyup`). Bugs that depend on that sequence won't be caught here.
 
@@ -209,6 +225,7 @@ containing its own `api/`, `components/`, `pages/`, `types/`.
 `services/`, `types/` directories shared across features.
 
 **Why feature-based:**
+
 - Code that changes together lives together. Adding a new employees filter touches
   `features/employees/` only — no hunting across four top-level directories.
 - Feature folders can be extracted into separate packages or micro-frontends if the
@@ -216,6 +233,7 @@ containing its own `api/`, `components/`, `pages/`, `types/`.
 - Easier for a new developer to understand the scope of a feature.
 
 **What we give up:**
+
 - Shared primitives (Shadcn components, layout) still live at a top level and must
   be treated carefully to avoid feature-specific logic leaking in.
 - Slightly more nesting than a flat structure.

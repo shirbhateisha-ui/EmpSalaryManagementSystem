@@ -22,9 +22,9 @@ export const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { index: true, element: <DashboardPage /> },
-          { path: 'employees',    element: <EmployeesPage /> },
+          { path: 'employees', element: <EmployeesPage /> },
           { path: 'employees/:id', element: <EmployeeDetailPage /> },
-          { path: 'analytics',   element: <AnalyticsPage /> },
+          { path: 'analytics', element: <AnalyticsPage /> },
           {
             element: <RoleGuard allowedRoles={['ADMIN']} />,
             children: [{ path: 'users', element: <UsersPage /> }],

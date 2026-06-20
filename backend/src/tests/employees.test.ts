@@ -54,7 +54,10 @@ describe('Employee Repository', () => {
 
   it('updates an employee', () => {
     const emp = seedTestEmployee();
-    const updated = employeeRepository.update(emp.id, { department: 'Finance', status: 'inactive' });
+    const updated = employeeRepository.update(emp.id, {
+      department: 'Finance',
+      status: 'inactive',
+    });
 
     expect(updated).toBeDefined();
     expect(updated!.department).toBe('Finance');
@@ -92,7 +95,10 @@ describe('Employee Repository', () => {
     seedTestEmployee({ email: 'hr@test.com', department: 'HR' });
 
     const result = employeeRepository.list({
-      page: 1, limit: 10, offset: 0, department: 'Engineering',
+      page: 1,
+      limit: 10,
+      offset: 0,
+      department: 'Engineering',
     });
     expect(result.total).toBe(1);
     expect(result.employees[0].department).toBe('Engineering');
@@ -124,7 +130,11 @@ describe('Employee Repository', () => {
     seedTestEmployee({ email: 'bob@test.com', name: 'Bob' });
 
     const result = employeeRepository.list({
-      page: 1, limit: 10, offset: 0, sort: 'name', order: 'asc',
+      page: 1,
+      limit: 10,
+      offset: 0,
+      sort: 'name',
+      order: 'asc',
     });
     expect(result.employees.map((e) => e.name)).toEqual(['Alice', 'Bob', 'Charlie']);
   });
@@ -208,10 +218,7 @@ describe('Employee API endpoints', () => {
   });
 
   async function loginAs(email: string, password: string): Promise<string> {
-    const res = await request(app)
-      .post('/api/v1/auth/login')
-      .send({ email, password })
-      .expect(200);
+    const res = await request(app).post('/api/v1/auth/login').send({ email, password }).expect(200);
     return res.body.data.accessToken as string;
   }
 
@@ -238,8 +245,12 @@ describe('Employee API endpoints', () => {
       .post('/api/v1/employees')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        name: 'Test', email: 'test@acme.com', country: 'US',
-        department: 'Eng', currency_code: 'USD', joining_date: '2024-01-01',
+        name: 'Test',
+        email: 'test@acme.com',
+        country: 'US',
+        department: 'Eng',
+        currency_code: 'USD',
+        joining_date: '2024-01-01',
       })
       .expect(403);
 
@@ -274,8 +285,12 @@ describe('Employee API endpoints', () => {
       .post('/api/v1/employees')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        name: 'Jane 2', email: 'jane@acme.com', country: 'US',
-        department: 'HR', currency_code: 'USD', joining_date: '2024-01-01',
+        name: 'Jane 2',
+        email: 'jane@acme.com',
+        country: 'US',
+        department: 'HR',
+        currency_code: 'USD',
+        joining_date: '2024-01-01',
       })
       .expect(409);
 

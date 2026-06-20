@@ -10,11 +10,19 @@ import { RoleGuard } from '@/features/auth/components/RoleGuard';
 import type { User } from '@/features/auth/types/auth.types';
 
 const adminUser: User = {
-  id: 1, name: 'Admin', email: 'admin@acme.com', role: 'ADMIN', status: 'active',
+  id: 1,
+  name: 'Admin',
+  email: 'admin@acme.com',
+  role: 'ADMIN',
+  status: 'active',
 };
 
 const viewerUser: User = {
-  id: 2, name: 'Viewer', email: 'viewer@acme.com', role: 'VIEWER', status: 'active',
+  id: 2,
+  name: 'Viewer',
+  email: 'viewer@acme.com',
+  role: 'VIEWER',
+  status: 'active',
 };
 
 function makeStore(user: User | null) {
@@ -29,8 +37,7 @@ function makeStore(user: User | null) {
       [baseApi.reducerPath]: baseApi.reducer,
     },
     preloadedState: { auth },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(baseApi.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
   });
 }
 

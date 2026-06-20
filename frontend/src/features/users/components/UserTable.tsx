@@ -27,10 +27,7 @@ const ROLE_CLASSES: Record<Role, string> = {
 function RoleBadge({ role }: { role: Role }) {
   return (
     <span
-      className={cn(
-        'inline-block rounded px-2 py-0.5 text-xs font-semibold',
-        ROLE_CLASSES[role],
-      )}
+      className={cn('inline-block rounded px-2 py-0.5 text-xs font-semibold', ROLE_CLASSES[role])}
     >
       {ROLE_LABELS[role]}
     </span>
@@ -89,13 +86,15 @@ export function UserTable({ users, currentUserId }: UserTableProps) {
             <TableRow key={user.id}>
               <TableCell className="font-medium">
                 {user.name}
-                {isSelf && (
-                  <span className="ml-2 text-xs text-muted-foreground">(you)</span>
-                )}
+                {isSelf && <span className="ml-2 text-xs text-muted-foreground">(you)</span>}
               </TableCell>
               <TableCell className="text-muted-foreground">{user.email}</TableCell>
-              <TableCell><RoleBadge role={user.role} /></TableCell>
-              <TableCell><StatusBadge status={user.status} /></TableCell>
+              <TableCell>
+                <RoleBadge role={user.role} />
+              </TableCell>
+              <TableCell>
+                <StatusBadge status={user.status} />
+              </TableCell>
               <TableCell className="text-right">
                 <Button
                   variant="ghost"

@@ -62,8 +62,16 @@ describe('Analytics Repository', () => {
     seedTestCurrency('EUR', 1.1);
     const usdEmp = seedTestEmployee({ email: 'usd@test.com', currency_code: 'USD' });
     const eurEmp = seedTestEmployee({ email: 'eur@test.com', currency_code: 'EUR' });
-    seedTestSalary(usdEmp.id, { base_salary: 50000, currency_code: 'USD', effective_date: '2024-01-01' });
-    seedTestSalary(eurEmp.id, { base_salary: 50000, currency_code: 'EUR', effective_date: '2024-01-01' });
+    seedTestSalary(usdEmp.id, {
+      base_salary: 50000,
+      currency_code: 'USD',
+      effective_date: '2024-01-01',
+    });
+    seedTestSalary(eurEmp.id, {
+      base_salary: 50000,
+      currency_code: 'EUR',
+      effective_date: '2024-01-01',
+    });
 
     const r = analyticsRepository.summary();
     expect(r.total_annual_usd).toBeCloseTo(50000 + 50000 * 1.1, 2);
@@ -84,9 +92,9 @@ describe('Analytics Repository', () => {
 
   it('byDepartment groups and orders by total_annual_usd desc', () => {
     const eng = seedTestEmployee({ email: 'eng@test.com', department: 'Engineering' });
-    const hr  = seedTestEmployee({ email: 'hr@test.com',  department: 'HR' });
+    const hr = seedTestEmployee({ email: 'hr@test.com', department: 'HR' });
     seedTestSalary(eng.id, { base_salary: 90000, effective_date: '2024-01-01' });
-    seedTestSalary(hr.id,  { base_salary: 50000, effective_date: '2024-01-01' });
+    seedTestSalary(hr.id, { base_salary: 50000, effective_date: '2024-01-01' });
 
     const rows = analyticsRepository.byDepartment();
     expect(rows[0].department).toBe('Engineering');
@@ -199,10 +207,7 @@ describe('Analytics API endpoints', () => {
   });
 
   async function loginAs(email: string, password: string): Promise<string> {
-    const res = await request(app)
-      .post('/api/v1/auth/login')
-      .send({ email, password })
-      .expect(200);
+    const res = await request(app).post('/api/v1/auth/login').send({ email, password }).expect(200);
     return res.body.data.accessToken as string;
   }
 
@@ -244,7 +249,7 @@ describe('Analytics API endpoints', () => {
     const us = seedTestEmployee({ email: 'us@test.com', country: 'US' });
     const uk = seedTestEmployee({ email: 'uk@test.com', country: 'UK' });
     seedTestSalary(us.id, { base_salary: 100000, effective_date: '2024-01-01' });
-    seedTestSalary(uk.id, { base_salary: 50000,  effective_date: '2024-01-01' });
+    seedTestSalary(uk.id, { base_salary: 50000, effective_date: '2024-01-01' });
 
     const res = await request(app)
       .get('/api/v1/analytics/by-country')
@@ -258,9 +263,9 @@ describe('Analytics API endpoints', () => {
   it('GET /analytics/by-department returns array ordered by total desc', async () => {
     const token = await loginAs('admin@test.com', 'Admin1234');
     const eng = seedTestEmployee({ email: 'eng@test.com', department: 'Engineering' });
-    const hr  = seedTestEmployee({ email: 'hr@test.com',  department: 'HR' });
+    const hr = seedTestEmployee({ email: 'hr@test.com', department: 'HR' });
     seedTestSalary(eng.id, { base_salary: 90000, effective_date: '2024-01-01' });
-    seedTestSalary(hr.id,  { base_salary: 40000, effective_date: '2024-01-01' });
+    seedTestSalary(hr.id, { base_salary: 40000, effective_date: '2024-01-01' });
 
     const res = await request(app)
       .get('/api/v1/analytics/by-department')
@@ -327,10 +332,25 @@ describe('Analytics API endpoints', () => {
   it('VIEWER role can access all analytics endpoints', async () => {
     const token = await loginAs('viewer@test.com', 'Viewer1234');
 
-    await request(app).get('/api/v1/analytics/summary').set('Authorization', `Bearer ${token}`).expect(200);
-    await request(app).get('/api/v1/analytics/by-country').set('Authorization', `Bearer ${token}`).expect(200);
-    await request(app).get('/api/v1/analytics/by-department').set('Authorization', `Bearer ${token}`).expect(200);
-    await request(app).get('/api/v1/analytics/distribution').set('Authorization', `Bearer ${token}`).expect(200);
-    await request(app).get('/api/v1/analytics/top-earners').set('Authorization', `Bearer ${token}`).expect(200);
+    await request(app)
+      .get('/api/v1/analytics/summary')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    await request(app)
+      .get('/api/v1/analytics/by-country')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    await request(app)
+      .get('/api/v1/analytics/by-department')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    await request(app)
+      .get('/api/v1/analytics/distribution')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+    await request(app)
+      .get('/api/v1/analytics/top-earners')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
   });
 });

@@ -85,7 +85,12 @@ export function toast(props: Omit<ToasterToast, 'id'>) {
   const id = genId();
   dispatch({
     type: 'ADD_TOAST',
-    toast: { ...props, id, open: true, onOpenChange: (open) => !open && dispatch({ type: 'DISMISS_TOAST', toastId: id }) },
+    toast: {
+      ...props,
+      id,
+      open: true,
+      onOpenChange: (open) => !open && dispatch({ type: 'DISMISS_TOAST', toastId: id }),
+    },
   });
   return { id, dismiss: () => dispatch({ type: 'DISMISS_TOAST', toastId: id }) };
 }

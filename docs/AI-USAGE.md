@@ -38,6 +38,7 @@ instructed never to commit or push without an explicit request.
 ## Representative Prompts by Phase
 
 ### Foundation & scaffold (Phases 0–1)
+
 ```
 Set up an npm workspaces monorepo with a backend (Node/Express/TypeScript)
 and a frontend (Vite/React/TypeScript). Backend uses better-sqlite3.
@@ -53,6 +54,7 @@ using @faker-js/faker.
 ```
 
 ### Backend auth (Phase 2)
+
 ```
 Implement JWT authentication with rotating refresh tokens stored as an
 httpOnly cookie. Access tokens expire in 15 minutes. Refresh tokens expire
@@ -64,6 +66,7 @@ three roles: ADMIN, HR_MANAGER, VIEWER.
 ```
 
 ### Backend modules (Phases 5–7)
+
 ```
 Implement the employees module following Route → Controller → Service →
 Repository. The repository uses hand-written parameterised SQL only.
@@ -83,6 +86,7 @@ distribution (6 fixed salary bands using CASE WHEN in SQL, always return all
 ```
 
 ### Frontend components (Phases 3–4, 8–9)
+
 ```
 Implement the AppShell with a collapsible sidebar. The sidebar nav items come
 from a navigation config. Use Shadcn UI Card, Button, Table primitives.
@@ -101,6 +105,7 @@ Handle loading, error, empty (headcount = 0), and data states.
 ```
 
 ### Tests
+
 ```
 Write Vitest tests for the analytics repository. Include a test that seeds
 an employee with a EUR salary using a currency with rate_to_usd = 1.1 and
@@ -141,15 +146,15 @@ These instructions were maintained throughout all phases:
 Every AI-generated file was reviewed and, where applicable, run before being
 accepted. Specific manual checks:
 
-| Area | What was checked |
-|------|-----------------|
-| SQL queries | Ran against the seed database; compared totals to hand-computed values |
-| Currency normalisation | Verified `base_salary * rate_to_usd` produces correct USD totals with a known fixture |
-| Auth middleware chain | Tested 401 (no token), 403 (wrong role), 422 (bad body) via Postman before writing automated tests |
-| Refresh token rotation | Manually verified that re-using a revoked refresh token returns 401 |
-| v_current_salary view | Verified that adding a second salary record for an employee updates the view's result |
-| Test failures | All test failures were read and diagnosed before fixing — Claude was not permitted to blindly retry |
-| Response envelope | Checked that every route returns `{ success, data }` or `{ success, error }` with the correct HTTP status |
+| Area                   | What was checked                                                                                          |
+| ---------------------- | --------------------------------------------------------------------------------------------------------- |
+| SQL queries            | Ran against the seed database; compared totals to hand-computed values                                    |
+| Currency normalisation | Verified `base_salary * rate_to_usd` produces correct USD totals with a known fixture                     |
+| Auth middleware chain  | Tested 401 (no token), 403 (wrong role), 422 (bad body) via Postman before writing automated tests        |
+| Refresh token rotation | Manually verified that re-using a revoked refresh token returns 401                                       |
+| v_current_salary view  | Verified that adding a second salary record for an employee updates the view's result                     |
+| Test failures          | All test failures were read and diagnosed before fixing — Claude was not permitted to blindly retry       |
+| Response envelope      | Checked that every route returns `{ success, data }` or `{ success, error }` with the correct HTTP status |
 
 ---
 
@@ -157,13 +162,13 @@ accepted. Specific manual checks:
 
 Several AI outputs required correction:
 
-| Issue | Fix |
-|-------|-----|
-| `cs.id AS salary_id` in employee repository — the view already aliases `s.id AS salary_id`, so the SELECT must use `cs.salary_id` | Fixed the SELECT to use the correct alias from the view |
-| `employee.controller.ts` imported from `'../../shared/utils/response.js'` (wrong filename) | Corrected to `response.utils.js` |
-| Debounce tests timed out at 5,000 ms when using `userEvent.setup({ advanceTimers })` | Switched to `fireEvent.change()` + `vi.useFakeTimers()` |
-| Analytics test regex `/distribution across bands/i` did not match "How are salaries **distributed** across bands?" | Changed regex to `/salaries distributed across bands/i` |
-| `getByText` failing with "found multiple elements" for text appearing in both a chart and a table | Changed to `getAllByText(...)[0]` or `getAllByText(...).length > 0` assertions |
+| Issue                                                                                                                             | Fix                                                                            |
+| --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `cs.id AS salary_id` in employee repository — the view already aliases `s.id AS salary_id`, so the SELECT must use `cs.salary_id` | Fixed the SELECT to use the correct alias from the view                        |
+| `employee.controller.ts` imported from `'../../shared/utils/response.js'` (wrong filename)                                        | Corrected to `response.utils.js`                                               |
+| Debounce tests timed out at 5,000 ms when using `userEvent.setup({ advanceTimers })`                                              | Switched to `fireEvent.change()` + `vi.useFakeTimers()`                        |
+| Analytics test regex `/distribution across bands/i` did not match "How are salaries **distributed** across bands?"                | Changed regex to `/salaries distributed across bands/i`                        |
+| `getByText` failing with "found multiple elements" for text appearing in both a chart and a table                                 | Changed to `getAllByText(...)[0]` or `getAllByText(...).length > 0` assertions |
 
 ---
 

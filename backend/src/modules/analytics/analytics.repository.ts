@@ -16,7 +16,9 @@ export const analyticsRepository = {
     max_annual_usd: number;
   } {
     const db = getDb();
-    return db.prepare(`
+    return db
+      .prepare(
+        `
       SELECT
         COUNT(*)                              AS headcount,
         COALESCE(SUM(cs.base_salary_usd), 0) AS total_annual_usd,
@@ -24,12 +26,16 @@ export const analyticsRepository = {
         COALESCE(MIN(cs.base_salary_usd), 0) AS min_annual_usd,
         COALESCE(MAX(cs.base_salary_usd), 0) AS max_annual_usd
       ${ACTIVE_EMPLOYEES_JOIN}
-    `).get() as ReturnType<typeof analyticsRepository.summary>;
+    `,
+      )
+      .get() as ReturnType<typeof analyticsRepository.summary>;
   },
 
   byCountry(): CountryPayroll[] {
     const db = getDb();
-    return db.prepare(`
+    return db
+      .prepare(
+        `
       SELECT
         e.country,
         COUNT(*)                AS headcount,
@@ -38,12 +44,16 @@ export const analyticsRepository = {
       ${ACTIVE_EMPLOYEES_JOIN}
       GROUP BY e.country
       ORDER BY total_annual_usd DESC
-    `).all() as CountryPayroll[];
+    `,
+      )
+      .all() as CountryPayroll[];
   },
 
   byDepartment(): DepartmentPayroll[] {
     const db = getDb();
-    return db.prepare(`
+    return db
+      .prepare(
+        `
       SELECT
         e.department,
         COUNT(*)                AS headcount,
@@ -52,12 +62,16 @@ export const analyticsRepository = {
       ${ACTIVE_EMPLOYEES_JOIN}
       GROUP BY e.department
       ORDER BY total_annual_usd DESC
-    `).all() as DepartmentPayroll[];
+    `,
+      )
+      .all() as DepartmentPayroll[];
   },
 
   distributionCounts(): { band_index: number; headcount: number }[] {
     const db = getDb();
-    return db.prepare(`
+    return db
+      .prepare(
+        `
       SELECT
         CASE
           WHEN cs.base_salary_usd <  30000 THEN 0
@@ -71,12 +85,16 @@ export const analyticsRepository = {
       ${ACTIVE_EMPLOYEES_JOIN}
       GROUP BY band_index
       ORDER BY band_index
-    `).all() as { band_index: number; headcount: number }[];
+    `,
+      )
+      .all() as { band_index: number; headcount: number }[];
   },
 
   topEarners(limit: number): TopEarner[] {
     const db = getDb();
-    return db.prepare(`
+    return db
+      .prepare(
+        `
       SELECT
         e.id,
         e.name,
@@ -87,6 +105,8 @@ export const analyticsRepository = {
       ${ACTIVE_EMPLOYEES_JOIN}
       ORDER BY cs.base_salary_usd DESC
       LIMIT ?
-    `).all(limit) as TopEarner[];
+    `,
+      )
+      .all(limit) as TopEarner[];
   },
 };

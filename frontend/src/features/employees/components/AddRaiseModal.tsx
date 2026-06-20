@@ -29,11 +29,12 @@ function extractApiError(error: unknown): string {
 
 function validate(f: AddRaiseRequest) {
   const e: Partial<Record<keyof AddRaiseRequest, string>> = {};
-  if (!f.base_salary || f.base_salary <= 0)    e.base_salary    = 'Must be a positive number';
-  if (!f.currency_code.trim())                  e.currency_code  = 'Currency code is required';
-  if (!f.country.trim())                        e.country        = 'Country is required';
-  if (!f.effective_date)                        e.effective_date = 'Effective date is required';
-  else if (!/^\d{4}-\d{2}-\d{2}$/.test(f.effective_date)) e.effective_date = 'Use YYYY-MM-DD format';
+  if (!f.base_salary || f.base_salary <= 0) e.base_salary = 'Must be a positive number';
+  if (!f.currency_code.trim()) e.currency_code = 'Currency code is required';
+  if (!f.country.trim()) e.country = 'Country is required';
+  if (!f.effective_date) e.effective_date = 'Effective date is required';
+  else if (!/^\d{4}-\d{2}-\d{2}$/.test(f.effective_date))
+    e.effective_date = 'Use YYYY-MM-DD format';
   return e;
 }
 
@@ -44,7 +45,9 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
     country: employeeCountry,
     effective_date: '',
   });
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof AddRaiseRequest, string>>>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof AddRaiseRequest, string>>>(
+    {},
+  );
   const [addSalary, { isLoading, error }] = useAddSalaryMutation();
 
   function set(key: keyof AddRaiseRequest, value: string) {
@@ -63,22 +66,38 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
     try {
       await addSalary({ employeeId, body: form }).unwrap();
       onClose();
-    } catch { /* shown via error state */ }
+    } catch {
+      /* shown via error state */
+    }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="ar-title">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ar-title"
+    >
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle id="ar-title" className="text-lg">Add Salary Record</CardTitle>
-          <button type="button" onClick={onClose} className="rounded p-1 text-muted-foreground hover:bg-accent" aria-label="Close">
+          <CardTitle id="ar-title" className="text-lg">
+            Add Salary Record
+          </CardTitle>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 text-muted-foreground hover:bg-accent"
+            aria-label="Close"
+          >
             <X className="h-4 w-4" />
           </button>
         </CardHeader>
         <CardContent>
           <form onSubmit={(e) => void handleSubmit(e)} noValidate className="space-y-4">
             <div className="space-y-1.5">
-              <label htmlFor="ar-salary" className="text-sm font-medium">Base Salary</label>
+              <label htmlFor="ar-salary" className="text-sm font-medium">
+                Base Salary
+              </label>
               <Input
                 id="ar-salary"
                 type="number"
@@ -89,11 +108,15 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
                 disabled={isLoading}
                 aria-invalid={!!fieldErrors.base_salary}
               />
-              {fieldErrors.base_salary && <p className="text-xs text-destructive">{fieldErrors.base_salary}</p>}
+              {fieldErrors.base_salary && (
+                <p className="text-xs text-destructive">{fieldErrors.base_salary}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="ar-currency" className="text-sm font-medium">Currency Code</label>
+              <label htmlFor="ar-currency" className="text-sm font-medium">
+                Currency Code
+              </label>
               <select
                 id="ar-currency"
                 value={form.currency_code}
@@ -104,14 +127,20 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
               >
                 <option value="">-- Select Currency --</option>
                 {CURRENCIES.map((c) => (
-                  <option key={c.code} value={c.code}>{c.code} — {c.name}</option>
+                  <option key={c.code} value={c.code}>
+                    {c.code} — {c.name}
+                  </option>
                 ))}
               </select>
-              {fieldErrors.currency_code && <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>}
+              {fieldErrors.currency_code && (
+                <p className="text-xs text-destructive">{fieldErrors.currency_code}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="ar-country" className="text-sm font-medium">Country</label>
+              <label htmlFor="ar-country" className="text-sm font-medium">
+                Country
+              </label>
               <select
                 id="ar-country"
                 value={form.country}
@@ -122,10 +151,14 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
               >
                 <option value="">-- Select Country --</option>
                 {COUNTRIES.map((c) => (
-                  <option key={c.code} value={c.name}>{c.name}</option>
+                  <option key={c.code} value={c.name}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
-              {fieldErrors.country && <p className="text-xs text-destructive">{fieldErrors.country}</p>}
+              {fieldErrors.country && (
+                <p className="text-xs text-destructive">{fieldErrors.country}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -137,7 +170,9 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
                 placeholder="Pick a date"
                 aria-invalid={!!fieldErrors.effective_date}
               />
-              {fieldErrors.effective_date && <p className="text-xs text-destructive">{fieldErrors.effective_date}</p>}
+              {fieldErrors.effective_date && (
+                <p className="text-xs text-destructive">{fieldErrors.effective_date}</p>
+              )}
             </div>
 
             {error && (
@@ -147,8 +182,12 @@ export function AddRaiseModal({ employeeId, employeeCountry, employeeCurrency, o
             )}
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>Cancel</Button>
-              <Button type="submit" disabled={isLoading}>{isLoading ? 'Saving…' : 'Add Salary'}</Button>
+              <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Saving…' : 'Add Salary'}
+              </Button>
             </div>
           </form>
         </CardContent>

@@ -18,9 +18,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   return (
     <aside className="flex h-full w-64 flex-col border-r bg-card">
       <div className="border-b px-6 py-5">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          ACME
-        </p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">ACME</p>
         <h1 className="text-lg font-semibold">Salary Management</h1>
       </div>
 

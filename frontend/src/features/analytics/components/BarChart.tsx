@@ -14,7 +14,10 @@ interface BarChartProps {
 }
 
 const COMPACT = new Intl.NumberFormat('en-US', {
-  style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1,
+  style: 'currency',
+  currency: 'USD',
+  notation: 'compact',
+  maximumFractionDigits: 1,
 });
 
 export function BarChart({
@@ -33,7 +36,9 @@ export function BarChart({
         return (
           <div key={item.label} role="listitem" className="space-y-1">
             <div className="flex items-center justify-between text-sm">
-              <span className="truncate font-medium" title={item.label}>{item.label}</span>
+              <span className="truncate font-medium" title={item.label}>
+                {item.label}
+              </span>
               <span className="ml-4 shrink-0 text-muted-foreground">{formatValue(item.value)}</span>
             </div>
             <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
@@ -43,9 +48,7 @@ export function BarChart({
                 aria-label={`${item.label}: ${formatValue(item.value)}`}
               />
             </div>
-            {item.sub && (
-              <p className="text-xs text-muted-foreground">{item.sub}</p>
-            )}
+            {item.sub && <p className="text-xs text-muted-foreground">{item.sub}</p>}
           </div>
         );
       })}

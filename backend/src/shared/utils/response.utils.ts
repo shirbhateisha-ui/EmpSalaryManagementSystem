@@ -38,11 +38,7 @@ export function sendSuccess<T>(
   return res.status(options.status ?? 200).json(body);
 }
 
-export function sendError(
-  res: Response,
-  error: ApiErrorBody,
-  status = 500,
-): Response {
+export function sendError(res: Response, error: ApiErrorBody, status = 500): Response {
   const body: ApiErrorResponse = { success: false, error };
   return res.status(status).json(body);
 }

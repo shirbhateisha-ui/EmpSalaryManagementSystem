@@ -14,22 +14,33 @@ import { BarChart } from '../components/BarChart';
 import { TopEarnersTable } from '../components/TopEarnersTable';
 import { InsightsPanel } from '../components/InsightsPanel';
 
-const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const USD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
 
 export default function AnalyticsPage() {
-  const summary     = useGetSummaryQuery();
-  const byCountry   = useGetByCountryQuery();
-  const byDept      = useGetByDepartmentQuery();
+  const summary = useGetSummaryQuery();
+  const byCountry = useGetByCountryQuery();
+  const byDept = useGetByDepartmentQuery();
   const distribution = useGetDistributionQuery();
-  const topEarners  = useGetTopEarnersQuery(10);
+  const topEarners = useGetTopEarnersQuery(10);
 
-  const isLoading = summary.isLoading || byCountry.isLoading || byDept.isLoading
-    || distribution.isLoading || topEarners.isLoading;
-  const isError = summary.isError || byCountry.isError || byDept.isError
-    || distribution.isError || topEarners.isError;
+  const isLoading =
+    summary.isLoading ||
+    byCountry.isLoading ||
+    byDept.isLoading ||
+    distribution.isLoading ||
+    topEarners.isLoading;
+  const isError =
+    summary.isError ||
+    byCountry.isError ||
+    byDept.isError ||
+    distribution.isError ||
+    topEarners.isError;
 
-  const isEmpty = !isLoading && !isError
-    && summary.data?.headcount === 0;
+  const isEmpty = !isLoading && !isError && summary.data?.headcount === 0;
 
   function refetchAll() {
     void summary.refetch();
@@ -155,15 +166,19 @@ export default function AnalyticsPage() {
           </Card>
 
           {/* Insights panel */}
-          {summary.data && byCountry.data && byDept.data && distribution.data && topEarners.data && (
-            <InsightsPanel
-              summary={summary.data}
-              byCountry={byCountry.data}
-              byDepartment={byDept.data}
-              distribution={distribution.data}
-              topEarners={topEarners.data}
-            />
-          )}
+          {summary.data &&
+            byCountry.data &&
+            byDept.data &&
+            distribution.data &&
+            topEarners.data && (
+              <InsightsPanel
+                summary={summary.data}
+                byCountry={byCountry.data}
+                byDepartment={byDept.data}
+                distribution={distribution.data}
+                topEarners={topEarners.data}
+              />
+            )}
         </>
       )}
     </div>

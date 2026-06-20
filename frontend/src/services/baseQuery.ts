@@ -5,10 +5,7 @@ import {
   type FetchArgs,
   type FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
-import {
-  clearCredentials,
-  setAccessToken,
-} from '@/features/auth/store/auth.slice';
+import { clearCredentials, setAccessToken } from '@/features/auth/store/auth.slice';
 import type { ApiSuccessResponse } from '@/types/api.types';
 import { getApiBaseUrl } from '@/types/api.types';
 import type { RootState } from '@/app/store';
@@ -39,7 +36,9 @@ export const baseQueryWithReauth: BaseQueryFn<
       extraOptions,
     );
 
-    const refreshData = refreshResult.data as ApiSuccessResponse<{ accessToken: string }> | undefined;
+    const refreshData = refreshResult.data as
+      | ApiSuccessResponse<{ accessToken: string }>
+      | undefined;
 
     if (refreshData?.success && refreshData.data.accessToken) {
       api.dispatch(setAccessToken(refreshData.data.accessToken));

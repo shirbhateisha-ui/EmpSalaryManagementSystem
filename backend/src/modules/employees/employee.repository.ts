@@ -99,8 +99,7 @@ export const employeeRepository = {
       LEFT JOIN v_current_salary cs ON cs.employee_id = e.id
       ${where}
     `;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const total = (db.prepare(countSql).get(...(whereParams as any[])) as { count: number }).count;
+    const total = (db.prepare(countSql).get(...whereParams) as { count: number }).count;
 
     const listSql = `
       ${SELECT_EMPLOYEE}
@@ -108,36 +107,37 @@ export const employeeRepository = {
       ORDER BY ${sortCol} ${sortDir}
       LIMIT ? OFFSET ?
     `;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows = db.prepare(listSql).all(...(whereParams as any[]), opts.limit, opts.offset) as EmployeeRow[];
+    const rows = db
+      .prepare(listSql)
+      .all(...whereParams, opts.limit, opts.offset) as EmployeeRow[];
 
     return { employees: rows.map(mapRow), total };
   },
 
   findById(id: number): Employee | undefined {
     const db = getDb();
-    const row = db
-      .prepare(`${SELECT_EMPLOYEE} WHERE e.id = ?`)
-      .get(id) as EmployeeRow | undefined;
+    const row = db.prepare(`${SELECT_EMPLOYEE} WHERE e.id = ?`).get(id) as EmployeeRow | undefined;
     return row ? mapRow(row) : undefined;
   },
 
   findByEmail(email: string): EmployeeRecord | undefined {
     const db = getDb();
-    return db
-      .prepare('SELECT * FROM employees WHERE email = ?')
-      .get(email.toLowerCase()) as EmployeeRecord | undefined;
+    return db.prepare('SELECT * FROM employees WHERE email = ?').get(email.toLowerCase()) as
+      | EmployeeRecord
+      | undefined;
   },
 
   create(input: CreateEmployeeInput): Employee {
     const db = getDb();
     const now = new Date().toISOString();
     const result = db
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO employees
           (name, email, country, department, currency_code, status, joining_date, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `)
+      `,
+      )
       .run(
         input.name,
         input.email.toLowerCase(),
@@ -159,7 +159,8 @@ export const employeeRepository = {
     const db = getDb();
     const now = new Date().toISOString();
 
-    db.prepare(`
+    db.prepare(
+      `
       UPDATE employees
       SET
         name         = COALESCE(?, name),
@@ -171,7 +172,8 @@ export const employeeRepository = {
         joining_date = COALESCE(?, joining_date),
         updated_at   = ?
       WHERE id = ?
-    `).run(
+    `,
+    ).run(
       input.name ?? null,
       input.email ? input.email.toLowerCase() : null,
       input.country ?? null,

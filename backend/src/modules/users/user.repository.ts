@@ -33,17 +33,15 @@ function toPublicUser(user: UserRecord): AuthUser {
 export const userRepository = {
   findById(id: number): UserRecord | undefined {
     const db = getDb();
-    const row = db
-      .prepare('SELECT * FROM users WHERE id = ?')
-      .get(id) as UserRecord | undefined;
+    const row = db.prepare('SELECT * FROM users WHERE id = ?').get(id) as UserRecord | undefined;
     return row ? mapUser(row) : undefined;
   },
 
   findByEmail(email: string): UserRecord | undefined {
     const db = getDb();
-    const row = db
-      .prepare('SELECT * FROM users WHERE email = ?')
-      .get(email.toLowerCase()) as UserRecord | undefined;
+    const row = db.prepare('SELECT * FROM users WHERE email = ?').get(email.toLowerCase()) as
+      | UserRecord
+      | undefined;
     return row ? mapUser(row) : undefined;
   },
 
@@ -53,12 +51,14 @@ export const userRepository = {
       .count;
 
     const rows = db
-      .prepare(`
+      .prepare(
+        `
         SELECT id, name, email, role, status, created_at, updated_at
         FROM users
         ORDER BY id ASC
         LIMIT ? OFFSET ?
-      `)
+      `,
+      )
       .all(limit, offset) as Omit<UserRecord, 'password_hash'>[];
 
     return {
@@ -77,10 +77,12 @@ export const userRepository = {
     const db = getDb();
     const now = new Date().toISOString();
     const result = db
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO users (name, email, password_hash, role, status, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?, ?)
-      `)
+      `,
+      )
       .run(
         input.name,
         input.email.toLowerCase(),
@@ -107,7 +109,8 @@ export const userRepository = {
     const db = getDb();
     const now = new Date().toISOString();
 
-    db.prepare(`
+    db.prepare(
+      `
       UPDATE users
       SET
         name = COALESCE(?, name),
@@ -116,7 +119,8 @@ export const userRepository = {
         password_hash = COALESCE(?, password_hash),
         updated_at = ?
       WHERE id = ?
-    `).run(
+    `,
+    ).run(
       input.name ?? null,
       input.role ?? null,
       input.status ?? null,

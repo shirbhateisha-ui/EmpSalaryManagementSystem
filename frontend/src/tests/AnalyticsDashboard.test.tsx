@@ -8,11 +8,11 @@ import { baseApi } from '@/services/baseQuery';
 import type { AuthState } from '@/features/auth/store/auth.slice';
 
 vi.mock('@/features/analytics/api/analytics.api', () => ({
-  useGetSummaryQuery:      vi.fn(),
-  useGetByCountryQuery:    vi.fn(),
+  useGetSummaryQuery: vi.fn(),
+  useGetByCountryQuery: vi.fn(),
   useGetByDepartmentQuery: vi.fn(),
   useGetDistributionQuery: vi.fn(),
-  useGetTopEarnersQuery:   vi.fn(),
+  useGetTopEarnersQuery: vi.fn(),
   analyticsApi: { reducerPath: 'analyticsApi', reducer: () => ({}) },
 }));
 
@@ -25,13 +25,19 @@ import {
 } from '@/features/analytics/api/analytics.api';
 
 import AnalyticsPage from '@/features/analytics/pages/AnalyticsPage';
-import type { SalarySummary, CountryPayroll, DepartmentPayroll, SalaryBand, TopEarner } from '@/features/analytics/types/analytics.types';
+import type {
+  SalarySummary,
+  CountryPayroll,
+  DepartmentPayroll,
+  SalaryBand,
+  TopEarner,
+} from '@/features/analytics/types/analytics.types';
 
-const mockSummary     = useGetSummaryQuery as ReturnType<typeof vi.fn>;
-const mockByCountry   = useGetByCountryQuery as ReturnType<typeof vi.fn>;
-const mockByDept      = useGetByDepartmentQuery as ReturnType<typeof vi.fn>;
-const mockDist        = useGetDistributionQuery as ReturnType<typeof vi.fn>;
-const mockTopEarners  = useGetTopEarnersQuery as ReturnType<typeof vi.fn>;
+const mockSummary = useGetSummaryQuery as ReturnType<typeof vi.fn>;
+const mockByCountry = useGetByCountryQuery as ReturnType<typeof vi.fn>;
+const mockByDept = useGetByDepartmentQuery as ReturnType<typeof vi.fn>;
+const mockDist = useGetDistributionQuery as ReturnType<typeof vi.fn>;
+const mockTopEarners = useGetTopEarnersQuery as ReturnType<typeof vi.fn>;
 
 function makeStore(authOverride: Partial<AuthState> = {}) {
   const auth: AuthState = {
@@ -77,31 +83,74 @@ const DEPARTMENTS: DepartmentPayroll[] = [
 ];
 
 const BANDS: SalaryBand[] = [
-  { band: 'Under $30k',  min_usd: 0,      max_usd: 30000,  headcount: 2 },
-  { band: '$30k–$60k',   min_usd: 30000,  max_usd: 60000,  headcount: 10 },
-  { band: '$60k–$90k',   min_usd: 60000,  max_usd: 90000,  headcount: 20 },
-  { band: '$90k–$120k',  min_usd: 90000,  max_usd: 120000, headcount: 12 },
+  { band: 'Under $30k', min_usd: 0, max_usd: 30000, headcount: 2 },
+  { band: '$30k–$60k', min_usd: 30000, max_usd: 60000, headcount: 10 },
+  { band: '$60k–$90k', min_usd: 60000, max_usd: 90000, headcount: 20 },
+  { band: '$90k–$120k', min_usd: 90000, max_usd: 120000, headcount: 12 },
   { band: '$120k–$150k', min_usd: 120000, max_usd: 150000, headcount: 4 },
-  { band: 'Over $150k',  min_usd: 150000, max_usd: null,   headcount: 2 },
+  { band: 'Over $150k', min_usd: 150000, max_usd: null, headcount: 2 },
 ];
 
 const EARNERS: TopEarner[] = [
-  { id: 1, name: 'Alice Top', department: 'Engineering', country: 'US', annual_usd: 200_000, monthly_usd: 16_666 },
-  { id: 2, name: 'Bob Second', department: 'HR', country: 'UK', annual_usd: 150_000, monthly_usd: 12_500 },
+  {
+    id: 1,
+    name: 'Alice Top',
+    department: 'Engineering',
+    country: 'US',
+    annual_usd: 200_000,
+    monthly_usd: 16_666,
+  },
+  {
+    id: 2,
+    name: 'Bob Second',
+    department: 'HR',
+    country: 'UK',
+    annual_usd: 150_000,
+    monthly_usd: 12_500,
+  },
 ];
 
-function mockAll(overrides: Partial<{
-  summaryLoading: boolean; summaryError: boolean; summaryData: SalarySummary | null;
-}> = {}) {
+function mockAll(
+  overrides: Partial<{
+    summaryLoading: boolean;
+    summaryError: boolean;
+    summaryData: SalarySummary | null;
+  }> = {},
+) {
   const loading = overrides.summaryLoading ?? false;
-  const error   = overrides.summaryError   ?? false;
-  const data    = overrides.summaryData    ?? SUMMARY;
+  const error = overrides.summaryError ?? false;
+  const data = overrides.summaryData ?? SUMMARY;
 
-  mockSummary.mockReturnValue({ isLoading: loading, isError: error, data: data ?? undefined, refetch: vi.fn() });
-  mockByCountry.mockReturnValue({ isLoading: loading, isError: error, data: loading || error ? undefined : COUNTRIES, refetch: vi.fn() });
-  mockByDept.mockReturnValue({ isLoading: loading, isError: error, data: loading || error ? undefined : DEPARTMENTS, refetch: vi.fn() });
-  mockDist.mockReturnValue({ isLoading: loading, isError: error, data: loading || error ? undefined : BANDS, refetch: vi.fn() });
-  mockTopEarners.mockReturnValue({ isLoading: loading, isError: error, data: loading || error ? undefined : EARNERS, refetch: vi.fn() });
+  mockSummary.mockReturnValue({
+    isLoading: loading,
+    isError: error,
+    data: data ?? undefined,
+    refetch: vi.fn(),
+  });
+  mockByCountry.mockReturnValue({
+    isLoading: loading,
+    isError: error,
+    data: loading || error ? undefined : COUNTRIES,
+    refetch: vi.fn(),
+  });
+  mockByDept.mockReturnValue({
+    isLoading: loading,
+    isError: error,
+    data: loading || error ? undefined : DEPARTMENTS,
+    refetch: vi.fn(),
+  });
+  mockDist.mockReturnValue({
+    isLoading: loading,
+    isError: error,
+    data: loading || error ? undefined : BANDS,
+    refetch: vi.fn(),
+  });
+  mockTopEarners.mockReturnValue({
+    isLoading: loading,
+    isError: error,
+    data: loading || error ? undefined : EARNERS,
+    refetch: vi.fn(),
+  });
 }
 
 describe('AnalyticsPage', () => {
@@ -128,9 +177,9 @@ describe('AnalyticsPage', () => {
   it('renders KPI cards with correct values', () => {
     mockAll();
     renderPage();
-    expect(screen.getByText('50')).toBeInTheDocument();            // headcount
-    expect(screen.getByText(/\$80,000/)).toBeInTheDocument();      // avg salary
-    expect(screen.getByText(/\$30,000/)).toBeInTheDocument();      // min salary
+    expect(screen.getByText('50')).toBeInTheDocument(); // headcount
+    expect(screen.getByText(/\$80,000/)).toBeInTheDocument(); // avg salary
+    expect(screen.getByText(/\$30,000/)).toBeInTheDocument(); // min salary
     // max salary appears in KPI card and earner table — just assert at least one exists
     expect(screen.getAllByText(/\$200,000/).length).toBeGreaterThan(0);
   });

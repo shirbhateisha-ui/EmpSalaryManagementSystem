@@ -9,10 +9,13 @@ export function validate(schema: ZodTypeAny, part: RequestPart = 'body') {
     const result = schema.safeParse(req[part]);
     if (!result.success) {
       next(
-        new ValidationError('Validation failed', result.error.issues.map((issue) => ({
-          path: issue.path.join('.'),
-          message: issue.message,
-        }))),
+        new ValidationError(
+          'Validation failed',
+          result.error.issues.map((issue) => ({
+            path: issue.path.join('.'),
+            message: issue.message,
+          })),
+        ),
       );
       return;
     }

@@ -17,18 +17,18 @@ export default function EmployeesPage() {
   const { user } = useAuth();
   const canWrite = user?.role === 'ADMIN' || user?.role === 'HR_MANAGER';
 
-  const [search, setSearch]   = useState('');
-  const [status, setStatus]   = useState('');
-  const [sort, setSort]       = useState<EmployeeSortField>('created_at');
-  const [order, setOrder]     = useState<'asc' | 'desc'>('desc');
-  const [page, setPage]       = useState(1);
+  const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('');
+  const [sort, setSort] = useState<EmployeeSortField>('created_at');
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc');
+  const [page, setPage] = useState(1);
   const [showCreate, setShowCreate] = useState(false);
 
   const debouncedSearch = useDebounce(search, 300);
 
   const { data, isLoading, isError, refetch } = useListEmployeesQuery({
-    search:  debouncedSearch || undefined,
-    status:  status as 'active' | 'inactive' | '' || undefined,
+    search: debouncedSearch || undefined,
+    status: (status as 'active' | 'inactive' | '') || undefined,
     sort,
     order,
     page,
@@ -60,9 +60,7 @@ export default function EmployeesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Employees</h1>
-          <p className="text-sm text-muted-foreground">
-            Manage your workforce directory.
-          </p>
+          <p className="text-sm text-muted-foreground">Manage your workforce directory.</p>
         </div>
         {canWrite && (
           <Button onClick={() => setShowCreate(true)} className="gap-2">
@@ -89,8 +87,10 @@ export default function EmployeesPage() {
         />
       )}
 
-      {!isLoading && !isError && data && (
-        data.employees.length === 0 ? (
+      {!isLoading &&
+        !isError &&
+        data &&
+        (data.employees.length === 0 ? (
           <EmptyState
             title="No employees found"
             description={
@@ -111,8 +111,7 @@ export default function EmployeesPage() {
             </div>
             <PaginationControls meta={data.meta} onPageChange={setPage} />
           </div>
-        )
-      )}
+        ))}
 
       {showCreate && <CreateEmployeeModal onClose={() => setShowCreate(false)} />}
     </div>

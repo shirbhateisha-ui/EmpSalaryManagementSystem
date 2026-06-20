@@ -19,9 +19,7 @@ export const createEmployeeSchema = z.object({
   country: z.string().trim().min(1, 'Country is required'),
   department: z.string().trim().min(1, 'Department is required'),
   currency_code: z.string().trim().min(1, 'Currency code is required'),
-  joining_date: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'joining_date must be YYYY-MM-DD'),
+  joining_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'joining_date must be YYYY-MM-DD'),
   status: z.enum(['active', 'inactive']).default('active'),
 });
 
@@ -32,7 +30,10 @@ export const updateEmployeeSchema = z
     country: z.string().trim().min(1).optional(),
     department: z.string().trim().min(1).optional(),
     currency_code: z.string().trim().min(1).optional(),
-    joining_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    joining_date: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
     status: z.enum(['active', 'inactive']).optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {

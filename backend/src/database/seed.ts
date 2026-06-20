@@ -90,7 +90,8 @@ function seedAdminUser(): void {
   const passwordHash = bcrypt.hashSync(env.adminPassword, BCRYPT_ROUNDS);
   const now = new Date().toISOString();
 
-  db.prepare(`
+  db.prepare(
+    `
     INSERT INTO users (name, email, password_hash, role, status, created_at, updated_at)
     VALUES (?, ?, ?, 'ADMIN', 'active', ?, ?)
     ON CONFLICT(email) DO UPDATE SET
@@ -99,7 +100,8 @@ function seedAdminUser(): void {
       role = excluded.role,
       status = excluded.status,
       updated_at = excluded.updated_at
-  `).run(env.adminName, env.adminEmail, passwordHash, now, now);
+  `,
+  ).run(env.adminName, env.adminEmail, passwordHash, now, now);
 }
 
 function clearSeedData(): void {
@@ -187,7 +189,7 @@ function seedEmployeesAndSalaries(): void {
         }
 
         const increasePct = faker.number.float({ min: 0.03, max: 0.12, fractionDigits: 2 });
-        currentSalary = Math.round(currentSalary * (1 + increasePct) / 100) * 100;
+        currentSalary = Math.round((currentSalary * (1 + increasePct)) / 100) * 100;
 
         insertSalary.run({
           employee_id: employeeId,

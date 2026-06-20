@@ -1,10 +1,19 @@
 import { Link } from 'react-router-dom';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 import type { TopEarner } from '../types/analytics.types';
 
-const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+const USD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
 
 export function TopEarnersTable({ earners }: { earners: TopEarner[] }) {
   return (
@@ -31,7 +40,9 @@ export function TopEarnersTable({ earners }: { earners: TopEarner[] }) {
             <TableCell>{e.department}</TableCell>
             <TableCell>{e.country}</TableCell>
             <TableCell className="text-right">{USD.format(e.annual_usd)}</TableCell>
-            <TableCell className="text-right text-muted-foreground">{USD.format(e.monthly_usd)}</TableCell>
+            <TableCell className="text-right text-muted-foreground">
+              {USD.format(e.monthly_usd)}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
